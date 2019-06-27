@@ -1,6 +1,7 @@
 package com.practice;
 
 import com.practice.fileio.Blemp;
+import com.practice.fileio.Config;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -54,11 +55,16 @@ public class Main extends Frame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        var loadConfig = new Config();
+        loadConfig.start();
+
+
         var appWindow = new Main();
 
         appWindow.setTitle("TOPP App");
         appWindow.setSize(800, 600);
         appWindow.setVisible(true);
+
     }
 
     /**
