@@ -38,6 +38,7 @@ public class Main extends Frame implements ActionListener {
              */
             @Override
             public void windowClosing(WindowEvent e) {
+                BlempCleanUp.clearDDO();
                 System.exit(0);
             }
         });

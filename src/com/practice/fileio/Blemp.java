@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class Blemp implements Runnable{
     private final Thread thread;
-    private final String devPath = "C:\\Users\\bolinger\\Documents\\SW Projects\\Blob\\C-HSSX.blemp";
+    private final String devPath = "C:\\Users\\bolinger\\Documents\\SW Projects\\Blob\\DDO.blemp";
     private String userInput;
 
     public Blemp(String userInput) {
