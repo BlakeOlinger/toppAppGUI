@@ -5,6 +5,8 @@ import com.practice.DDO;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+
+// TODO change dev path to install directory
 public class Blemp implements Runnable{
     private final Thread thread;
     private final String devPath = "C:\\Users\\bolinger\\Documents\\SW Projects\\Blob\\DDO.blemp";

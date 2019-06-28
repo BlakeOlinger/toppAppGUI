@@ -28,6 +28,7 @@ class BlempCleanUp implements Runnable{
      */
     @Override
     public void run() {
+        // TODO change path to install directory
         String devPath = "C:\\Users\\bolinger\\Documents\\SW Projects\\Blob\\DDO.blemp";
         try (var DDO = new FileOutputStream(devPath)) {
             int cleanFile = (int) ' ';
