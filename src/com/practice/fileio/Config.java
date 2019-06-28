@@ -9,6 +9,7 @@ import java.util.Arrays;
 public class Config implements Runnable{
     private final Thread thread;
     private final String devPath = "C:\\Users\\bolinger\\Documents\\SW Projects\\Blob\\config.blemp";
+    public static String DBKillPath = "toppAppDBdaemon/DBDaemon.config";
 
     public Config() {
         thread = new Thread(this, "Load Config");
