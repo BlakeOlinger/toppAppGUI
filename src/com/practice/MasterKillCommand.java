@@ -1,7 +1,5 @@
 package com.practice;
 
-import com.practice.fileio.Config;
-
 import java.io.IOException;
 
 class MasterKillCommand {

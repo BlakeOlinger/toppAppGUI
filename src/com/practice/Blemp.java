@@ -1,6 +1,4 @@
-package com.practice.fileio;
-
-import com.practice.DDO;
+package com.practice;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

@@ -1,6 +1,4 @@
-package com.practice.fileio;
-
-import com.practice.DDO;
+package com.practice;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,18 +6,18 @@ import java.util.Arrays;
 
 public class Config implements Runnable{
     private final Thread thread;
-    private final String devPath = "C:\\Users\\bolinger\\Documents\\SW Projects\\Blob\\config.blemp";
-    public static String DBKillPath = "programFiles/config/master.config";
+    static String DBKillPath = "programFiles/config/master.config";
 
-    public Config() {
+    Config() {
         thread = new Thread(this, "Load Config");
     }
 
-    public void start() {
+    void start() {
         thread.start();
     }
 
     private void loadBlempConfig() {
+        String devPath = "C:\\Users\\bolinger\\Documents\\SW Projects\\Blob\\config.blemp";
         try (var readConfig = new FileInputStream(devPath)){
             int inputByte;
             char[] chars = new char[readConfig.available()];
