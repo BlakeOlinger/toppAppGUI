@@ -37,8 +37,8 @@ class Main extends Frame implements ActionListener {
             public void windowClosing(WindowEvent e) {
                 BlempCleanUp.clearDDO();
                 MasterKillCommand.kill();
+                Config.programState = "1";
                 System.out.println(" Ending GUI Microservice...");
-                System.exit(0);
             }
         });
     }
@@ -56,7 +56,7 @@ class Main extends Frame implements ActionListener {
 
     public static void main(String[] args) {
         new Config().start();
-
+        new GUIDaemon().start();
 
         var appWindow = new Main();
 

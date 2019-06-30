@@ -1,18 +1,26 @@
 package com.practice;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 class MasterKillCommand {
     static void kill() {
-        try {
-            // an 'x' command to master.config tells the master to kill all services
-            // and close the app completely
-            System.out.println(" Sending Master Command - End All Processes");
-        var process = Runtime.getRuntime().exec("cmd.exe /c echo x > " +
-                Config.DBKillPath);
+        var masterConfigPath = "programFiles/config/master.config";
 
-            process.waitFor();
-        } catch (InterruptedException | IOException ignore) {
+        if (new File(masterConfigPath).exists()) {
+
+            try (var masterConfig = new FileOutputStream(masterConfigPath)) {
+                System.out.println(" Sending Master Command - End All Processes");
+
+                var command = (int) 'x';
+
+                masterConfig.write(command);
+            } catch (IOException ignore) {
+            }
+
+        } else {
+            System.out.println(" ERROR: Master Config File Not Found");
         }
     }
 }
