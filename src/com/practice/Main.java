@@ -39,6 +39,7 @@ class Main extends Frame implements ActionListener {
                 MasterKillCommand.kill();
                 Config.programState = "1";
                 System.out.println(" Ending GUI Microservice...");
+                System.exit(0);
             }
         });
     }
