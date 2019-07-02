@@ -49,8 +49,9 @@ class Main extends Frame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        // rename load blemp.config();
-        new Config().start();
+        loadBlempConfig();
+
+        /*
         new GUIDaemon().start();
 
         var appWindow = new Main();
@@ -59,6 +60,12 @@ class Main extends Frame implements ActionListener {
         appWindow.setSize(800, 600);
         appWindow.setVisible(true);
 
+         */
+
+    }
+
+    private static void loadBlempConfig() {
+        new BlempConfig().load();
     }
 
     /**
