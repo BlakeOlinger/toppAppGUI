@@ -31,10 +31,12 @@ class Main extends Frame implements ActionListener {
              */
             @Override
             public void windowClosing(WindowEvent e) {
-                BlempCleanUp.clearDDO();
+                new BlempCleanUp().clearDDO();
+
                 MasterKillCommand.kill();
+
                 Config.programState = "1";
-                System.out.println(" Ending GUI Microservice...");
+
                 System.exit(0);
             }
         });
@@ -72,11 +74,6 @@ class Main extends Frame implements ActionListener {
         new BlempConfig().load();
     }
 
-    /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
-     */
     @Override
     public void actionPerformed(ActionEvent e) {
         new Blemp(textField.getText()).start();
