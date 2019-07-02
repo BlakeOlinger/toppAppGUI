@@ -1,8 +1,11 @@
 package com.practice;
 
+import java.io.IOException;
+import java.nio.file.Files;
+
 public class Blemp implements Runnable{
     private final Thread thread;
-    private String userInput;
+    private final String userInput;
 
     Blemp(String userInput) {
         thread = new Thread(this, "Blemp IO");
@@ -15,24 +18,13 @@ public class Blemp implements Runnable{
 
     @Override
     public void run() {
-        DDO.blempDDO[1] = userInput;
+        Config.blempDDO[1] = userInput;
 
-        String equation = DDO.blempDDO[0] + "$" + DDO.blempDDO[1] + "$" + DDO.blempDDO[2] + "$";
+        var equationOutput = Config.blempDDO[0] + "$" + Config.blempDDO[1] + "$" + Config.blempDDO[2] + "$";
 
-        char[] chars = equation.toCharArray();
-/*
-        try (var blempWrite = new FileOutputStream(devPath)) {
-            int outByte;
-            int index = 0;
-            do {
-                outByte = (int) chars[index++];
-                System.out.print((char) outByte);
-                blempWrite.write(outByte);
-            } while (index < chars.length);
-        }catch (IOException ignore) {
-
+        try {
+            Files.writeString(Config.BLEMP_DDO_PATH, equationOutput);
+        } catch (IOException ignore) {
         }
-
- */
     }
 }

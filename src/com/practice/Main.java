@@ -17,14 +17,10 @@ class Main extends Frame implements ActionListener {
         add(label);
 
         textField = new TextField(8);
+
         textField.addActionListener(this);
+
         add(textField);
-
-        var confirmButton = new Button("Modify");
-
-        confirmButton.addActionListener(this);
-
-        add(confirmButton);
 
         addWindowListener(new WindowAdapter() {
             /**
@@ -51,17 +47,25 @@ class Main extends Frame implements ActionListener {
     public static void main(String[] args) {
         loadBlempConfig();
 
-        /*
-        new GUIDaemon().start();
+        // Doesn't actually do anything ATM
+        // Except monitor and keep up to date
+        // the program running state
+        startDaemon();
 
+        startAppWindow();
+
+    }
+
+    private static void startAppWindow() {
         var appWindow = new Main();
 
         appWindow.setTitle("TOPP App");
         appWindow.setSize(800, 600);
         appWindow.setVisible(true);
+    }
 
-         */
-
+    private static void startDaemon() {
+        new GUIDaemon().start();
     }
 
     private static void loadBlempConfig() {
@@ -75,7 +79,6 @@ class Main extends Frame implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        var userInput = textField.getText();
-        new Blemp(userInput).start();
+        new Blemp(textField.getText()).start();
     }
 }

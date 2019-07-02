@@ -17,7 +17,7 @@ class BlempConfig implements Runnable{
     @Override
     public void run() {
         try {
-            DDO.blempDDO = Files.readString(Config.BLEMP_CONFIG_PATH)
+            Config.blempDDO = Files.readString(Config.BLEMP_CONFIG_PATH)
                     .split("\\$");
         } catch (IOException ignore) {
         }
