@@ -40,7 +40,9 @@ public class Config implements Runnable{
                 System.out.println("Start iteration");
                 System.out.println("ddo size " + ddo.length);
                 Arrays.stream(ddo).forEach(System.out::println);
+                // copies array to DDO
                 System.arraycopy(ddo, 0, DDO.blempDDO, 0, DDO.blempDDO.length);
+
                 Arrays.stream(DDO.blempDDO).forEach(System.out::println);
 
             } catch (IOException ignore) {
@@ -51,17 +53,6 @@ public class Config implements Runnable{
         }
     }
 
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
     @Override
     public void run() {
         loadBlempConfig();

@@ -44,18 +44,12 @@ class Main extends Frame implements ActionListener {
         });
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param g
-     * @since 1.7
-     */
-    @Override
     public void paint(Graphics g) {
         super.paint(g);
     }
 
     public static void main(String[] args) {
+        // rename load blemp.config();
         new Config().start();
         new GUIDaemon().start();
 
