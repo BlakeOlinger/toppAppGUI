@@ -5,9 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class Main extends Frame implements ActionListener {
     private final TextField textField;
+    private static final Logger logger =
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     private Main() {
         setLayout(new FlowLayout());
@@ -31,11 +35,17 @@ class Main extends Frame implements ActionListener {
              */
             @Override
             public void windowClosing(WindowEvent e) {
-                new BlempCleanUp().clearDDO();
+                var blempCleanUp = new BlempCleanUp();
+
+                blempCleanUp.clearDDO();
+
+                blempCleanUp.join();
 
                 MasterKillCommand.kill();
 
                 Config.programState = "1";
+
+                logger.log(Level.INFO, "Main Thread - GUI - Exit");
 
                 System.exit(0);
             }
@@ -47,18 +57,20 @@ class Main extends Frame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        logger.log(Level.INFO, "Main Thread - Start");
+
         loadBlempConfig();
 
-        // Doesn't actually do anything ATM
-        // Except monitor and keep up to date
-        // the program running state
         startDaemon();
 
         startAppWindow();
 
+        logger.log(Level.INFO, "Main Thread - Exit");
     }
 
     private static void startAppWindow() {
+        logger.log(Level.INFO, "Main Thread - GUI - Start");
+
         var appWindow = new Main();
 
         appWindow.setTitle("TOPP App");
@@ -67,11 +79,19 @@ class Main extends Frame implements ActionListener {
     }
 
     private static void startDaemon() {
-        new GUIDaemon().start();
+        var daemon = new GUIDaemon();
+
+        daemon.start();
+
+        daemon.join();
     }
 
     private static void loadBlempConfig() {
-        new BlempConfig().load();
+        var blempConfig = new BlempConfig();
+
+        blempConfig.load();
+
+        blempConfig.join();
     }
 
     @Override
