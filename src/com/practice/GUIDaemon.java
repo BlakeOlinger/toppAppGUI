@@ -29,7 +29,7 @@ class GUIDaemon implements Runnable{
 
     @Override
     public void run() {
-        logger.log(Level.INFO, "Daemon - Exit");
+        logger.log(Level.INFO, "Daemon - Start");
 
         do {
             try (var configFile = new FileInputStream("programFiles/config/GUI.config")){
@@ -41,6 +41,6 @@ class GUIDaemon implements Runnable{
 
         } while (Config.programState.compareTo("0") == 0);
 
-        logger.log(Level.INFO, "Daemon - Start");
+        logger.log(Level.INFO, "Daemon - Exit");
     }
 }

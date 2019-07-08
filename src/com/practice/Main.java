@@ -82,8 +82,6 @@ class Main extends Frame implements ActionListener {
         var daemon = new GUIDaemon();
 
         daemon.start();
-
-        daemon.join();
     }
 
     private static void loadBlempConfig() {
