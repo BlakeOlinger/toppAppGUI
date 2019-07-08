@@ -2,6 +2,7 @@ package com.practice;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,10 +32,12 @@ class BlempConfig implements Runnable{
         logger.log(Level.INFO, "Blemp Config - Start");
 
         try {
-            Config.blempDDO = Files.readString(Config.BLEMP_CONFIG_PATH)
+           String[] strings = Files.readString(Config.BLEMP_CONFIG_PATH)
                     .split("\\$");
 
-            if(Config.blempDDO.length > 0)
+            Collections.addAll(Config.blempDDO, strings);
+
+            if(Config.blempDDO.size() > 0)
                 logger.log(Level.INFO, "Blemp Config - Loaded");
             else
                 logger.log(Level.INFO, "Blemp Config - Error: Failed to Load");

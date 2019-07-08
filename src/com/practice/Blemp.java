@@ -18,9 +18,10 @@ public class Blemp implements Runnable{
 
     @Override
     public void run() {
-        Config.blempDDO[1] = userInput;
+        Config.blempDDO.set(1, userInput);
 
-        var equationOutput = Config.blempDDO[0] + "$" + Config.blempDDO[1] + "$" + Config.blempDDO[2] + "$";
+        var equationOutput = Config.blempDDO.get(0) + "$" + Config.blempDDO.get(1) +
+                "$" + Config.blempDDO.get(2) + "$";
 
         try {
             Files.writeString(Config.BLEMP_DDO_PATH, equationOutput);
