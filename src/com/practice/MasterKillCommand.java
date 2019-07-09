@@ -8,7 +8,8 @@ import java.util.logging.Logger;
 
 class MasterKillCommand {
     static void kill() {
-        var masterConfigPath = Paths.get("programFiles/config/master.config");
+        var masterConfigPath = Paths.get(Main.userRoot +
+                "programFiles/config/master.config");
         final Logger logger =
                 Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 

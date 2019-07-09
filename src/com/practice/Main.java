@@ -12,6 +12,7 @@ class Main extends Frame implements ActionListener {
     private final TextField textField;
     private static final Logger logger =
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    static final String userRoot = "C:/Users/bolinger/Desktop/test install/";
 
     private Main() {
         setLayout(new FlowLayout());

@@ -32,7 +32,8 @@ class GUIDaemon implements Runnable{
         logger.log(Level.INFO, "Daemon - Start");
 
         do {
-            try (var configFile = new FileInputStream("programFiles/config/GUI.config")){
+            try (var configFile = new FileInputStream(Main.userRoot +
+                    "programFiles/config/GUI.config")){
                 Config.programState = String.valueOf((char) configFile.read());
 
                 Thread.sleep(2000);
