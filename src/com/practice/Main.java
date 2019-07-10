@@ -21,6 +21,10 @@ class Main extends Frame implements ActionListener {
 
         add(label);
 
+//        var testLabel = new Label("Foo Bar");
+//
+//        add(testLabel);
+
         textField = new TextField(8);
 
         textField.addActionListener(this);
@@ -36,21 +40,25 @@ class Main extends Frame implements ActionListener {
              */
             @Override
             public void windowClosing(WindowEvent e) {
-                var blempCleanUp = new BlempCleanUp();
-
-                blempCleanUp.clearDDO();
-
-                blempCleanUp.join();
-
-                MasterKillCommand.kill();
-
-                Config.programState = "1";
-
-                logger.log(Level.INFO, "Main Thread - GUI - Exit");
-
-                System.exit(0);
+                onAppKill();
             }
         });
+    }
+
+    private void onAppKill() {
+        var blempCleanUp = new BlempCleanUp();
+
+        blempCleanUp.clearDDO();
+
+        blempCleanUp.join();
+
+        MasterKillCommand.kill();
+
+        Config.programState = "1";
+
+        logger.log(Level.INFO, "Main Thread - GUI - Exit");
+
+        System.exit(0);
     }
 
     public void paint(Graphics g) {
@@ -62,14 +70,16 @@ class Main extends Frame implements ActionListener {
 
         loadBlempConfig();
 
+        var main = startAppWindow();
+
         startDaemon();
 
-        startAppWindow();
-
         logger.log(Level.INFO, "Main Thread - Exit");
+
+        main.onAppKill();
     }
 
-    private static void startAppWindow() {
+    private static Main startAppWindow() {
         logger.log(Level.INFO, "Main Thread - GUI - Start");
 
         var appWindow = new Main();
@@ -77,6 +87,8 @@ class Main extends Frame implements ActionListener {
         appWindow.setTitle("TOPP App");
         appWindow.setSize(800, 600);
         appWindow.setVisible(true);
+
+        return appWindow;
     }
 
     private static void startDaemon() {
