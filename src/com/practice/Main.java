@@ -15,44 +15,45 @@ class Main extends Frame implements ActionListener {
     static final String userRoot = "C:/Users/bolinger/Desktop/test install/";
 
     private Main() {
-        setLayout(new FlowLayout());
+            setLayout(new FlowLayout());
 
-        var label = new Label("Cover Diameter: ");
+            var label = new Label("Cover Diameter: ");
 
-        add(label);
-
-//        var testLabel = new Label("Foo Bar");
+            add(label);
 //
-//        add(testLabel);
+//            var testLabel = new Label("Foo Bar");
 
-        textField = new TextField(8);
+//            add(testLabel);
 
-        textField.addActionListener(this);
+            textField = new TextField(8);
 
-        add(textField);
+            textField.addActionListener(this);
 
-        addWindowListener(new WindowAdapter() {
-            /**
-             * Invoked when a window is in the process of being closed.
-             * The close operation can be overridden at this point.
-             *
-             * @param e
-             */
-            @Override
-            public void windowClosing(WindowEvent e) {
-                onAppKill();
-            }
-        });
+            add(textField);
+
+            addWindowListener(new WindowAdapter() {
+                /**
+                 * Invoked when a window is in the process of being closed.
+                 * The close operation can be overridden at this point.
+                 *
+                 * @param e
+                 */
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    onAppKill();
+                }
+            });
     }
 
-    private void onAppKill() {
+    void onAppKill() {
         var blempCleanUp = new BlempCleanUp();
 
         blempCleanUp.clearDDO();
 
         blempCleanUp.join();
 
-        MasterKillCommand.kill();
+        if (!Config.isUpdate)
+            MasterKillCommand.kill();
 
         Config.programState = "1";
 
@@ -70,13 +71,13 @@ class Main extends Frame implements ActionListener {
 
         loadBlempConfig();
 
-        var main = startAppWindow();
+        Config.main = startAppWindow();
 
         startDaemon();
 
         logger.log(Level.INFO, "Main Thread - Exit");
 
-        main.onAppKill();
+        Config.main.onAppKill();
     }
 
     private static Main startAppWindow() {
@@ -95,6 +96,8 @@ class Main extends Frame implements ActionListener {
         var daemon = new GUIDaemon();
 
         daemon.start();
+
+        daemon.join();
     }
 
     private static void loadBlempConfig() {

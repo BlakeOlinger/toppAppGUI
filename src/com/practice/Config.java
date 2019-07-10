@@ -9,5 +9,7 @@ class Config {
     static final Path BLEMP_CONFIG_PATH = Paths.get(Main.userRoot +"programFiles/blemp/config.blemp");
     static final Path BLEMP_DDO_PATH = Paths.get(Main.userRoot + "programFiles/blemp/DDO.blemp");
     static ArrayList<String> blempDDO = new ArrayList<>();
+    static boolean isUpdate = false;
+    static Main main;
 
 }
