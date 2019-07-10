@@ -53,6 +53,10 @@ class GUIDaemon implements Runnable{
                     if (Config.isUpdate) {
                         softKill();
                     }
+
+                    countdown = 3;
+
+                    logger.log(Level.INFO, "Daemon - Checking for Update - Exit");
                 }
 
                 Thread.sleep(2000);

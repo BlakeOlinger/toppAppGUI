@@ -20,9 +20,9 @@ class Main extends Frame implements ActionListener {
             var label = new Label("Cover Diameter: ");
 
             add(label);
-//
-//            var testLabel = new Label("Foo Bar");
 
+//            var testLabel = new Label("Foo Bar");
+//
 //            add(testLabel);
 
             textField = new TextField(8);
