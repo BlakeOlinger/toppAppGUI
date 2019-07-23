@@ -32,12 +32,6 @@ class Main extends Frame implements ActionListener {
             add(textField);
 
             addWindowListener(new WindowAdapter() {
-                /**
-                 * Invoked when a window is in the process of being closed.
-                 * The close operation can be overridden at this point.
-                 *
-                 * @param e
-                 */
                 @Override
                 public void windowClosing(WindowEvent e) {
                     onAppKill();
