@@ -13,31 +13,43 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 class Main extends Frame implements ActionListener {
-    private final TextField textField;
+//    private final TextField textField;
     static final String userRoot = "C:/Users/bolinger/Desktop/test install/";
     private String message = "";
     private ArrayList<String[]> DDTOequations;
     private Path DDTOpath;
     private Path configPath;
     private Path swConfig;
+    private ArrayList<TextField> textFields;
+    private ArrayList<Label> labels;
 
-    private Main(ArrayList<String[]> DDTOequations, Path DDTOpath, Path configPath, Path swConfig) {
+    private Main(ArrayList<String[]> DDTOequations, Path DDTOpath, Path configPath, Path swConfig, ArrayList<TextField> textFields, ArrayList<Label> labels) {
         this.DDTOequations = DDTOequations;
         this.DDTOpath = DDTOpath;
         this.configPath = configPath;
         this.swConfig = swConfig;
+        this.textFields = textFields;
+        this.labels = labels;
 
         setLayout(new FlowLayout());
 
-            var label = new Label("Cover Diameter: ");
+        var index = 0;
 
-            add(label);
-
-            textField = new TextField(8);
-
+        for(TextField textField: textFields) {
             textField.addActionListener(this);
-
+            add(labels.get(index++));
             add(textField);
+        }
+
+//            var label = new Label("Cover Diameter: ");
+//
+//            add(label);
+//
+//            textField = new TextField(8);
+//
+//            textField.addActionListener(this);
+//
+//            add(textField);
 
             addWindowListener(new WindowAdapter() {
                 @Override
@@ -77,6 +89,10 @@ class Main extends Frame implements ActionListener {
          */
     }
 
+    // TODO - Get app to generate a dropdown list from C-HSSX.blemp
+    //  - equation list - have an input be available for that selection
+    //  - have the index used in the action performed function correlate
+    //  - to the input selection
     public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
 
@@ -219,7 +235,23 @@ class Main extends Frame implements ActionListener {
 
         if (checkForFile(swConfig, swConfigFileName)) return;
 
-        var appWindow = new Main(appendedEquationSegments, DDTOpath, configPath, swConfig);
+        var textFields = new ArrayList<TextField>();
+
+        var fieldNames = new ArrayList<String>();
+
+        for(String[] equation : appendedEquationSegments) {
+            fieldNames.add(equation[0]);
+        }
+
+        var labels = new ArrayList<Label>();
+
+        for (String name : fieldNames) {
+            labels.add(new Label(name));
+            textFields.add(new TextField(8));
+        }
+
+        var appWindow = new Main(appendedEquationSegments, DDTOpath,
+                configPath, swConfig, textFields, labels);
 
         appWindow.setTitle("TOPP App");
         appWindow.setSize(800, 600);
@@ -281,7 +313,19 @@ class Main extends Frame implements ActionListener {
         if (canWrite) {
             System.out.println(" - DDTO.blemp - Write Access Available");
 
-            var userInput = textField.getText();
+            var textEvent = "";
+            var textEventIndex = 0;
+
+            for(var i = 0; i < DDTOequations.size(); ++i) {
+                if (textFields.get(i).getText().compareTo("") != 0) {
+                    textEvent = textFields.get(i).getText();
+                    textEventIndex = i;
+                }
+            }
+
+            var userInput = textEvent;
+
+            System.out.println(" - Action Event - " + e.paramString());
 
             var DDTOequationsCopy = new ArrayList<>(DDTOequations);
 
@@ -307,14 +351,26 @@ class Main extends Frame implements ActionListener {
 
                     message = "";
 
-                    var significantIndex = DDTOequationsCopy.get(0)[DDTOequationsCopy.get(0).length - 1];
+                    var significantIndex = DDTOequationsCopy
+                            .get(textEventIndex)[DDTOequationsCopy
+                            .get(textEventIndex).length - 1];
 
-                    DDTOequationsCopy.get(0)[Integer.valueOf(significantIndex)] = userInput;
+                    DDTOequationsCopy
+                            .get(textEventIndex)[Integer.valueOf(significantIndex)] = userInput;
 
                     var DDTOequation = "";
 
-                    for (var i = 0; i < DDTOequationsCopy.get(0).length - 1; ++i)
-                        DDTOequation += DDTOequationsCopy.get(0)[i];
+                    // FIXME - current config with DDTOequation only allows a single
+                    //  - equation to be entered at a time
+                    //  - forcing to clear user input
+                    //  -- add a check to see if value changed otherwise don't write to DDTO
+                    //  -- write new equations used to a buffer that lists the equations
+                    //  - in a similar format to the C-HSS.blemp file - this will be use
+                    //  - for creating the custom .blemp file if the user saves it
+                    for (var i = 0; i < DDTOequationsCopy
+                            .get(textEventIndex).length - 1; ++i)
+                        DDTOequation += DDTOequationsCopy
+                                .get(textEventIndex)[i];
 
                     message += " write equation - " + DDTOequation;
 
