@@ -124,6 +124,11 @@ class Main extends Frame implements ActionListener {
                 for(String equation: equations)
                     System.out.println(equation);
 
+                // the last index of a given equation segment array is used to
+                // hold the index information of the significant value -
+                // - this is the value appended by an @ symbol and this
+                // is the value that will change based on user input
+
                 System.out.println(" - Getting Equation Segments");
 
                 var equationSegments = new ArrayList<String[]>();
@@ -137,6 +142,41 @@ class Main extends Frame implements ActionListener {
                 for(var i = 0; i < equations.length; ++i) {
                     for(var j = 0; j < equationSegments.get(i).length; ++j) {
                         System.out.println(equationSegments.get(i)[j]);
+                    }
+                }
+
+                System.out.println(" - Equation Segments with Significant Value Appended:");
+
+                var appendedEquationSegments = new ArrayList<String[]>();
+
+                for(var i = 0; i < equations.length; ++i) {
+                    var appendedSegmentSize = equationSegments.get(i).length + 1;
+
+                    var tempArray = new String[appendedSegmentSize];
+
+                    var significantValueIndex = "";
+
+                    for(var j = 0; j < appendedSegmentSize; ++j) {
+
+                        if (j < appendedSegmentSize - 1) {
+                            var copyValue = equationSegments.get(i)[j];
+
+                            if (copyValue.contains("@")) {
+                                significantValueIndex = String.valueOf(j);
+                            }
+
+                            tempArray[j] = copyValue;
+                        } else {
+                            tempArray[j] = significantValueIndex;
+                        }
+                    }
+
+                    appendedEquationSegments.add(tempArray);
+                }
+
+                for(var i = 0; i < equations.length; ++i) {
+                    for(var j = 0; j < appendedEquationSegments.get(i).length; ++j) {
+                        System.out.println(appendedEquationSegments.get(i)[j]);
                     }
                 }
 
@@ -199,4 +239,5 @@ class Main extends Frame implements ActionListener {
             repaint();
         }
     }
+
 }
