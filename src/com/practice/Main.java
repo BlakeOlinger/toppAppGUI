@@ -5,14 +5,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 class Main extends Frame implements ActionListener {
     private final TextField textField;
-    private static final Logger logger =
-            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     static final String userRoot = "C:/Users/bolinger/Desktop/test install/";
+    private String message = "";
 
     private Main() {
             setLayout(new FlowLayout());
@@ -20,10 +22,6 @@ class Main extends Frame implements ActionListener {
             var label = new Label("Cover Diameter: ");
 
             add(label);
-
-//            var testLabel = new Label("Foo Bar");
-//
-//            add(testLabel);
 
             textField = new TextField(8);
 
@@ -34,48 +32,129 @@ class Main extends Frame implements ActionListener {
             addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
-                    onAppKill();
+                    System.out.println("TOPP App GUI - Exit");
+
+                    System.exit(0);
                 }
             });
     }
 
+    @Override
+    public void paint(Graphics g) {
+        g.drawString(message, 50, 200);
+    }
+
     void onAppKill() {
-        var blempCleanUp = new BlempCleanUp();
-
-        blempCleanUp.clearDDO();
-
-        blempCleanUp.join();
+        /*
+        new BlempCleanUp().invoke();
 
         if (!Config.isUpdate)
             MasterKillCommand.kill();
 
         Config.programState = "1";
 
-        logger.log(Level.INFO, "Main Thread - GUI - Exit");
-
-        System.exit(0);
-    }
-
-    public void paint(Graphics g) {
-        super.paint(g);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+         */
     }
 
     public static void main(String[] args) {
-        logger.log(Level.INFO, "Main Thread - Start");
+        System.out.println("TOPP App GUI - Start");
 
-        loadBlempConfig();
+        var installRoot = "C:\\Users\\bolinger\\Desktop\\test install\\";
 
-        Config.main = startAppWindow();
+        var configFileName = "GUI.config";
 
-        startDaemon();
+        var configPath = Paths.get(installRoot + configFileName);
 
-        logger.log(Level.INFO, "Main Thread - Exit");
+        System.out.println(" - GUI Config - Check Installed");
 
-        Config.main.onAppKill();
-    }
+        if (Files.exists(configPath)) {
+            System.out.println(" - GUI Config - File Found");
+        } else {
+            System.out.println(" - WARNING - GUI Config - File Not Found");
 
-    private static Main startAppWindow() {
-        logger.log(Level.INFO, "Main Thread - GUI - Start");
+            try {
+                Files.createFile(configPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                System.out.println("TOPP App GUI - Exit");
+
+                return;
+            }
+
+            System.out.println(" - GUI Config - File Created");
+        }
+
+        System.out.println(" - GUI Config - Initializing");
+
+        try {
+            Files.writeString(configPath, "00");
+
+            System.out.println(" - GUI Config - Initialized");
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            System.out.println("TOPP App GUI - Exit");
+
+            return;
+        }
+
+        var blempFileName = "C-HSSX.blemp";
+
+        var blempPath = Paths.get(installRoot + blempFileName);
+
+        System.out.println(" - Reading Blemp File");
+
+        if (Files.exists(blempPath)) {
+            System.out.println(" - Blemp File Found");
+
+            try {
+                var equations = Files.readString(blempPath)
+                        .split("!");
+
+                System.out.println((" - Blemp File Equations - Count: " + equations.length));
+
+                System.out.println(" - Blemp File Equations:");
+
+                for(String equation: equations)
+                    System.out.println(equation);
+
+                System.out.println(" - Getting Equation Segments");
+
+                var equationSegments = new ArrayList<String[]>();
+
+                for (String equation : equations) {
+                    equationSegments.add(equation.split("\\$"));
+                }
+
+                System.out.println(" - Displaying Equation Segments:");
+
+                for(var i = 0; i < equations.length; ++i) {
+                    for(var j = 0; j < equationSegments.get(i).length; ++j) {
+                        System.out.println(equationSegments.get(i)[j]);
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                System.out.println("TOPP App GUI - Exit");
+
+                return;
+            }
+
+        } else {
+            System.out.println(" - ERROR - No Blemp File Found");
+
+            System.out.println("TOPP App GUI - Exit");
+
+            return;
+        }
 
         var appWindow = new Main();
 
@@ -83,7 +162,9 @@ class Main extends Frame implements ActionListener {
         appWindow.setSize(800, 600);
         appWindow.setVisible(true);
 
-        return appWindow;
+//        startDaemon();
+
+//        Config.main.onAppKill();
     }
 
     private static void startDaemon() {
@@ -94,16 +175,28 @@ class Main extends Frame implements ActionListener {
         daemon.join();
     }
 
-    private static void loadBlempConfig() {
-        var blempConfig = new BlempConfig();
 
-        blempConfig.load();
-
-        blempConfig.join();
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new Blemp(textField.getText()).start();
+        var userInput = textField.getText();
+
+        System.out.println(" - User Entered - " + userInput);
+
+        if (Pattern.matches("[0-9\\-.]+", userInput)) {
+            if (Math.abs(Double.valueOf(userInput)) > 300) {
+                message = " * Value must be between +- 300";
+
+                repaint();
+            } else {
+                message = "";
+
+                repaint();
+            }
+        } else {
+            message = " * Input Requires Numbers Only";
+
+            repaint();
+        }
     }
 }

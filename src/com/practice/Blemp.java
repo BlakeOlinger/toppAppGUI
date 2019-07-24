@@ -25,7 +25,8 @@ public class Blemp implements Runnable{
 
         try {
             Files.writeString(Config.BLEMP_DDO_PATH, equationOutput);
-        } catch (IOException ignore) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
