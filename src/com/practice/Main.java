@@ -7,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -15,9 +16,18 @@ class Main extends Frame implements ActionListener {
     private final TextField textField;
     static final String userRoot = "C:/Users/bolinger/Desktop/test install/";
     private String message = "";
+    private ArrayList<String[]> DDTOequations;
+    private Path DDTOpath;
+    private Path configPath;
+    private Path swConfig;
 
-    private Main() {
-            setLayout(new FlowLayout());
+    private Main(ArrayList<String[]> DDTOequations, Path DDTOpath, Path configPath, Path swConfig) {
+        this.DDTOequations = DDTOequations;
+        this.DDTOpath = DDTOpath;
+        this.configPath = configPath;
+        this.swConfig = swConfig;
+
+        setLayout(new FlowLayout());
 
             var label = new Label("Cover Diameter: ");
 
@@ -72,23 +82,7 @@ class Main extends Frame implements ActionListener {
 
         System.out.println(" - GUI Config - Check Installed");
 
-        if (Files.exists(configPath)) {
-            System.out.println(" - GUI Config - File Found");
-        } else {
-            System.out.println(" - WARNING - GUI Config - File Not Found");
-
-            try {
-                Files.createFile(configPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                System.out.println("TOPP App GUI - Exit");
-
-                return;
-            }
-
-            System.out.println(" - GUI Config - File Created");
-        }
+        if (checkForFile(configPath, configFileName)) return;
 
         System.out.println(" - GUI Config - Initializing");
 
@@ -103,12 +97,31 @@ class Main extends Frame implements ActionListener {
 
             return;
         }
+        var DDTOfileName = "DDTO.blemp";
+
+        var DDTOpath = Paths.get(installRoot + DDTOfileName);
+
+        if (checkForFile(DDTOpath, DDTOfileName)) return;
+
+        System.out.println(" - DDTO.blemp - Initializing");
+
+        try {
+            Files.writeString(DDTOpath, "");
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return;
+        }
+
+        System.out.println(" - DDTO.blemp - Initialized");
 
         var blempFileName = "C-HSSX.blemp";
 
         var blempPath = Paths.get(installRoot + blempFileName);
 
         System.out.println(" - Reading Blemp File");
+
+        var appendedEquationSegments = new ArrayList<String[]>();
 
         if (Files.exists(blempPath)) {
             System.out.println(" - Blemp File Found");
@@ -147,8 +160,6 @@ class Main extends Frame implements ActionListener {
 
                 System.out.println(" - Equation Segments with Significant Value Appended:");
 
-                var appendedEquationSegments = new ArrayList<String[]>();
-
                 for(var i = 0; i < equations.length; ++i) {
                     var appendedSegmentSize = equationSegments.get(i).length + 1;
 
@@ -161,7 +172,7 @@ class Main extends Frame implements ActionListener {
                         if (j < appendedSegmentSize - 1) {
                             var copyValue = equationSegments.get(i)[j];
 
-                            if (copyValue.contains("@")) {
+                            if (copyValue.contains("#")) {
                                 significantValueIndex = String.valueOf(j);
                             }
 
@@ -196,15 +207,43 @@ class Main extends Frame implements ActionListener {
             return;
         }
 
-        var appWindow = new Main();
+        var swConfigFileName = "SWmicroservice.config";
+
+        var swConfig = Paths.get(installRoot + swConfigFileName);
+
+        if (checkForFile(swConfig, swConfigFileName)) return;
+
+        var appWindow = new Main(appendedEquationSegments, DDTOpath, configPath, swConfig);
 
         appWindow.setTitle("TOPP App");
         appWindow.setSize(800, 600);
         appWindow.setVisible(true);
 
+        // FIXME - very likely a daemon is not needed given this is an event driven GUI
 //        startDaemon();
 
 //        Config.main.onAppKill();
+    }
+
+    private static boolean checkForFile(Path path, String fileName) {
+        if (Files.exists(path)) {
+            System.out.println(" - " + fileName + " - File Found");
+        } else {
+            System.out.println(" - WARNING - " + fileName + " - File Not Found");
+
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                System.out.println("TOPP App GUI - Exit");
+
+                return true;
+            }
+
+            System.out.println(" - " + fileName + " - File Created");
+        }
+        return false;
     }
 
     private static void startDaemon() {
@@ -219,25 +258,100 @@ class Main extends Frame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        var userInput = textField.getText();
+        var canWrite = false;
+        var waitCursor = new Cursor(Cursor.WAIT_CURSOR);
+        var defaultCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
-        System.out.println(" - User Entered - " + userInput);
+        setCursor(waitCursor);
 
-        if (Pattern.matches("[0-9\\-.]+", userInput)) {
-            if (Math.abs(Double.valueOf(userInput)) > 300) {
-                message = " * Value must be between +- 300";
+        System.out.println(" - User Input Detected - Checking for Write Access to DDTO.blemp");
 
-                repaint();
+        try {
+            canWrite = Files.readString(configPath).substring(1, 2).compareTo("0") == 0;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        if (canWrite) {
+            System.out.println(" - DDTO.blemp - Write Access Available");
+
+            var userInput = textField.getText();
+
+            var DDTOequationsCopy = new ArrayList<>(DDTOequations);
+
+            System.out.println(" - User Entered - " + userInput);
+
+            if (Pattern.matches("[0-9\\-.]+", userInput)) {
+                if (Math.abs(Double.valueOf(userInput)) > 300) {
+                    message = " * Value must be between +- 300";
+
+                    repaint();
+                } else {
+                    System.out.println(" - DDTO.blemp - Clean Up");
+
+                    try {
+                        Files.writeString(DDTOpath, "");
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+
+                        System.out.println(" - WARNING - Could Not Clean Up DDTO.blemp File");
+                    }
+
+                    System.out.println(" - DDTO.blemp - Clean Up - Success");
+
+                    message = "";
+
+                    var significantIndex = DDTOequationsCopy.get(0)[DDTOequationsCopy.get(0).length - 1];
+
+                    DDTOequationsCopy.get(0)[Integer.valueOf(significantIndex)] = userInput;
+
+                    var DDTOequation = "";
+
+                    for (var i = 0; i < DDTOequationsCopy.get(0).length - 1; ++i)
+                        DDTOequation += DDTOequationsCopy.get(0)[i];
+
+                    message += " write equation - " + DDTOequation;
+
+                    System.out.println(" - DDTO.blemp - Writing Equation");
+
+                    try {
+                        Files.writeString(DDTOpath, DDTOequation);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+
+                        System.out.println(" - WARNING - DDTO.blemp - Writing Equation - Failed");
+
+                        message += " - command failed - try again";
+                    }
+
+                    try {
+                        Files.writeString(swConfig, "00");
+                        Files.writeString(configPath, "01");
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    System.out.println(" - DDTO.blemp - Writing Equation - Success");
+
+                    message += " - command success";
+
+                    repaint();
+                }
             } else {
-                message = "";
+                message = " * Input Requires Numbers Only";
 
                 repaint();
             }
+
         } else {
-            message = " * Input Requires Numbers Only";
+            System.out.println(" - WARNING - DDTO.blemp - Write Access Denied");
+
+            message = " * Unable to Write Command to Solid Works Daemon - Please wait and enter again";
 
             repaint();
         }
+
+        setCursor(defaultCursor);
     }
 
 }
