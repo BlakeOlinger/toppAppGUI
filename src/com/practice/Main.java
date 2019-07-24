@@ -44,6 +44,12 @@ class Main extends Frame implements ActionListener {
                 public void windowClosing(WindowEvent e) {
                     System.out.println("TOPP App GUI - Exit");
 
+                    try {
+                        Files.writeString(swConfig, "11");
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
                     System.exit(0);
                 }
             });
@@ -315,7 +321,7 @@ class Main extends Frame implements ActionListener {
                     System.out.println(" - DDTO.blemp - Writing Equation");
 
                     try {
-                        Files.writeString(DDTOpath, DDTOequation);
+                        Files.writeString(DDTOpath, DDTOequation + "!");
                     } catch (IOException ex) {
                         ex.printStackTrace();
 
