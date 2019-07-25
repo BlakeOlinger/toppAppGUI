@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -68,78 +67,61 @@ class Main extends Frame implements ActionListener {
     public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
 
-        var installRoot = "C:\\Users\\final\\Desktop\\test install\\";
+        var startTime = System.currentTimeMillis();
 
-        System.out.println(" - Install Directory - Validating");
+        // FIXME - to check if installed and if not get install
+        //  - location from user without having to alter code
+        //  -- check for a given expected file like the config file
+        //  -- in the current directory - if not then prompt user
+        //  -- with file selector - directory only - set title to
+        //  -- set install directory - set that as the install root
+        //  -- variable
+        var installRoot = InstallRoot.getInstallRoot();
 
         var installRootPath = Paths.get(installRoot);
 
-        if (Files.exists(installRootPath)) {
-            System.out.println(" - Install Directory - Found");
-        } else {
-            System.out.println(" - WARNING - Install Directory - Not Found");
-
-            try {
-                Files.createDirectory(installRootPath);
-
-                System.out.println(" - Valid Install Directory - Created");
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                System.out.println("TOPP App GUI - Exit");
-
-                return;
-            }
-        }
-
-        var configFileName = "GUI.config";
-
-        var configPath = Paths.get(installRoot + configFileName);
-
-        System.out.println(" - GUI Config - Check Installed");
-
-        if (checkForFile(configPath, configFileName)) return;
-
-        System.out.println(" - GUI Config - Initializing");
-
-        try {
-            Files.writeString(configPath, "00");
-
-            System.out.println(" - GUI Config - Initialized");
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            System.out.println("TOPP App GUI - Exit");
-
+        if (!ToppFiles.validateDirectory("Install", installRootPath))
             return;
-        }
+
+        var GUIconfigFileName = "GUI.config";
+
+        var GUIconfigPath = Paths.get(installRoot + GUIconfigFileName);
+
+        if (!ToppFiles.validateFile(GUIconfigFileName, GUIconfigPath))
+            return;
+
+        Logger.cout(Level.INFO, GUIconfigFileName, "Initializing");
+    // FIXME - initializing was redundant - add argument to parameter
+        if (!ToppFiles.writeFile(
+                GUIconfigFileName,
+                GUIconfigPath,
+                "00",
+                "Initializing"))
+            return;
+
+        Logger.cout(Level.INFO, GUIconfigFileName, "Initialized");
+
         var DDTOfileName = "DDTO.blemp";
 
         var DDTOpath = Paths.get(installRoot + DDTOfileName);
 
-        if (checkForFile(DDTOpath, DDTOfileName)) return;
+        if (!ToppFiles.validateFile(DDTOfileName, DDTOpath)) return;
 
-        System.out.println(" - DDTO.blemp - Initializing");
+        Logger.cout(Level.INFO, DDTOfileName, "Initializing");
 
-        try {
-            Files.writeString(DDTOpath, "");
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            System.out.println("TOPP App GUI - Exit");
-
+        if (!ToppFiles.writeFile(DDTOfileName, DDTOpath, ""))
             return;
-        }
 
-        System.out.println(" - DDTO.blemp - Initialized");
+        Logger.cout(Level.INFO, DDTOfileName, "Initialized");
 
         var blempFileName = "C-HSSX.blemp";
 
         var blempPath = Paths.get(installRoot + blempFileName);
 
-        System.out.println(" - Reading Blemp File");
-
         var appendedEquationSegments = new ArrayList<String[]>();
+
+        if (!ToppFiles.validateFile(blempFileName, blempPath))
+            return;
 
         if (Files.exists(blempPath)) {
             System.out.println(" - Blemp File Found");
@@ -267,28 +249,10 @@ class Main extends Frame implements ActionListener {
         appWindow.setTitle("TOPP App");
         appWindow.setSize(800, 600);
         appWindow.setVisible(true);
+*/
+        var stopTime = System.currentTimeMillis();
 
-    }
-
-    private static boolean checkForFile(Path path, String fileName) {
-        if (Files.exists(path)) {
-            System.out.println(" - " + fileName + " - File Found");
-        } else {
-            System.out.println(" - WARNING - " + fileName + " - File Not Found");
-
-            try {
-                Files.createFile(path);
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                System.out.println("TOPP App GUI - Exit");
-
-                return true;
-            }
-
-            System.out.println(" - " + fileName + " - File Created");
-        }
-        return false;
+        System.out.printf(" - App Start Time - %,d ms%n", stopTime - startTime);
     }
 
     @Override
