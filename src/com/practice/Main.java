@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 class Main extends Frame implements ActionListener {
-//    private final TextField textField;
-    static final String userRoot = "C:/Users/bolinger/Desktop/test install/";
     private String message = "";
     private ArrayList<String[]> DDTOequations;
     private Path DDTOpath;
@@ -41,16 +40,6 @@ class Main extends Frame implements ActionListener {
             add(textField);
         }
 
-//            var label = new Label("Cover Diameter: ");
-//
-//            add(label);
-//
-//            textField = new TextField(8);
-//
-//            textField.addActionListener(this);
-//
-//            add(textField);
-
             addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
@@ -72,23 +61,6 @@ class Main extends Frame implements ActionListener {
         g.drawString(message, 50, 200);
     }
 
-    void onAppKill() {
-        /*
-        new BlempCleanUp().invoke();
-
-        if (!Config.isUpdate)
-            MasterKillCommand.kill();
-
-        Config.programState = "1";
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-         */
-    }
-
     // TODO - Get app to generate a dropdown list from C-HSSX.blemp
     //  - equation list - have an input be available for that selection
     //  - have the index used in the action performed function correlate
@@ -96,7 +68,29 @@ class Main extends Frame implements ActionListener {
     public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
 
-        var installRoot = "C:\\Users\\bolinger\\Desktop\\test install\\";
+        var installRoot = "C:\\Users\\final\\Desktop\\test install\\";
+
+        System.out.println(" - Install Directory - Validating");
+
+        var installRootPath = Paths.get(installRoot);
+
+        if (Files.exists(installRootPath)) {
+            System.out.println(" - Install Directory - Found");
+        } else {
+            System.out.println(" - WARNING - Install Directory - Not Found");
+
+            try {
+                Files.createDirectory(installRootPath);
+
+                System.out.println(" - Valid Install Directory - Created");
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                System.out.println("TOPP App GUI - Exit");
+
+                return;
+            }
+        }
 
         var configFileName = "GUI.config";
 
@@ -132,6 +126,8 @@ class Main extends Frame implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
 
+            System.out.println("TOPP App GUI - Exit");
+
             return;
         }
 
@@ -147,72 +143,20 @@ class Main extends Frame implements ActionListener {
 
         if (Files.exists(blempPath)) {
             System.out.println(" - Blemp File Found");
+        } else {
+            System.out.println(" - WARNING - No Blemp File Found");
 
             try {
-                var equations = Files.readString(blempPath)
-                        .split("!");
 
-                System.out.println((" - Blemp File Equations - Count: " + equations.length));
+                Files.createFile(blempPath);
 
-                System.out.println(" - Blemp File Equations:");
+                if (Files.exists(blempPath)) {
+                    var equations = "\"OD@sketch1\"=$40#$in$!";
 
-                for(String equation: equations)
-                    System.out.println(equation);
+                    Files.writeString(blempPath, equations);
 
-                // the last index of a given equation segment array is used to
-                // hold the index information of the significant value -
-                // - this is the value appended by an @ symbol and this
-                // is the value that will change based on user input
-
-                System.out.println(" - Getting Equation Segments");
-
-                var equationSegments = new ArrayList<String[]>();
-
-                for (String equation : equations) {
-                    equationSegments.add(equation.split("\\$"));
+                    System.out.println(" - Blemp File - Created and Initialized");
                 }
-
-                System.out.println(" - Displaying Equation Segments:");
-
-                for(var i = 0; i < equations.length; ++i) {
-                    for(var j = 0; j < equationSegments.get(i).length; ++j) {
-                        System.out.println(equationSegments.get(i)[j]);
-                    }
-                }
-
-                System.out.println(" - Equation Segments with Significant Value Appended:");
-
-                for(var i = 0; i < equations.length; ++i) {
-                    var appendedSegmentSize = equationSegments.get(i).length + 1;
-
-                    var tempArray = new String[appendedSegmentSize];
-
-                    var significantValueIndex = "";
-
-                    for(var j = 0; j < appendedSegmentSize; ++j) {
-
-                        if (j < appendedSegmentSize - 1) {
-                            var copyValue = equationSegments.get(i)[j];
-
-                            if (copyValue.contains("#")) {
-                                significantValueIndex = String.valueOf(j);
-                            }
-
-                            tempArray[j] = copyValue;
-                        } else {
-                            tempArray[j] = significantValueIndex;
-                        }
-                    }
-
-                    appendedEquationSegments.add(tempArray);
-                }
-
-                for(var i = 0; i < equations.length; ++i) {
-                    for(var j = 0; j < appendedEquationSegments.get(i).length; ++j) {
-                        System.out.println(appendedEquationSegments.get(i)[j]);
-                    }
-                }
-
             } catch (IOException e) {
                 e.printStackTrace();
 
@@ -220,13 +164,6 @@ class Main extends Frame implements ActionListener {
 
                 return;
             }
-
-        } else {
-            System.out.println(" - ERROR - No Blemp File Found");
-
-            System.out.println("TOPP App GUI - Exit");
-
-            return;
         }
 
         var swConfigFileName = "SWmicroservice.config";
@@ -234,6 +171,80 @@ class Main extends Frame implements ActionListener {
         var swConfig = Paths.get(installRoot + swConfigFileName);
 
         if (checkForFile(swConfig, swConfigFileName)) return;
+
+        try {
+            var equations = Files.readString(blempPath)
+                    .split("!");
+
+            System.out.println((" - Blemp File Equations - Count: " + equations.length));
+
+            System.out.println(" - Blemp File Equations:");
+
+            for(String equation: equations)
+                System.out.println(equation);
+
+            // the last index of a given equation segment array is used to
+            // hold the index information of the significant value -
+            // - this is the value appended by an @ symbol and this
+            // is the value that will change based on user input
+
+            System.out.println(" - Getting Equation Segments");
+
+            var equationSegments = new ArrayList<String[]>();
+
+            for (String equation : equations) {
+                equationSegments.add(equation.split("\\$"));
+            }
+
+            System.out.println(" - Displaying Equation Segments:");
+
+            for(var i = 0; i < equations.length; ++i) {
+                for(var j = 0; j < equationSegments.get(i).length; ++j) {
+                    System.out.println(equationSegments.get(i)[j]);
+                }
+            }
+
+            System.out.println(" - Equation Segments with Significant Value Appended:");
+
+            for(var i = 0; i < equations.length; ++i) {
+                var appendedSegmentSize = equationSegments.get(i).length + 1;
+
+                var tempArray = new String[appendedSegmentSize];
+
+                var significantValueIndex = "";
+
+                for(var j = 0; j < appendedSegmentSize; ++j) {
+
+                    if (j < appendedSegmentSize - 1) {
+                        var copyValue = equationSegments.get(i)[j];
+
+                        if (copyValue.contains("#")) {
+                            significantValueIndex = String.valueOf(j);
+                        }
+
+                        tempArray[j] = copyValue;
+                    } else {
+                        tempArray[j] = significantValueIndex;
+                    }
+                }
+
+                appendedEquationSegments.add(tempArray);
+            }
+
+            for(var i = 0; i < equations.length; ++i) {
+                for(var j = 0; j < appendedEquationSegments.get(i).length; ++j) {
+                    System.out.println(appendedEquationSegments.get(i)[j]);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            System.out.println("TOPP App GUI - Exit");
+
+            return;
+        }
+
 
         var textFields = new ArrayList<TextField>();
 
@@ -257,10 +268,6 @@ class Main extends Frame implements ActionListener {
         appWindow.setSize(800, 600);
         appWindow.setVisible(true);
 
-        // FIXME - very likely a daemon is not needed given this is an event driven GUI
-//        startDaemon();
-
-//        Config.main.onAppKill();
     }
 
     private static boolean checkForFile(Path path, String fileName) {
@@ -283,16 +290,6 @@ class Main extends Frame implements ActionListener {
         }
         return false;
     }
-
-    private static void startDaemon() {
-        var daemon = new GUIDaemon();
-
-        daemon.start();
-
-        daemon.join();
-    }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
