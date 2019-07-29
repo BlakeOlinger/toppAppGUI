@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 class Main extends Frame implements ActionListener {
 //    private final TextField textField;
-    static final String userRoot = "C:/Users/bolinger/Desktop/test install/";
+    static final String userRoot = "C:/Users/final/Desktop/test install/";
     private String message = "";
     private ArrayList<String[]> DDTOequations;
     private Path DDTOpath;
@@ -96,7 +96,7 @@ class Main extends Frame implements ActionListener {
     public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
 
-        var installRoot = "C:\\Users\\bolinger\\Desktop\\test install\\";
+        var installRoot = "C:\\Users\\final\\Desktop\\test install\\";
 
         var configFileName = "GUI.config";
 
