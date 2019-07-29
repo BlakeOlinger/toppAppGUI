@@ -1,17 +1,16 @@
 package com.practice;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 class InstallRoot {
 
-    static String getInstallRoot() {
+    static String getInstallRoot(String installDirectoryName) {
         var currentDirectory = Paths.get("").toAbsolutePath();
 
         var workingDirectoryChunks = currentDirectory.toString().split("\\\\");
 
         var installRoot = "C:\\Users\\" + workingDirectoryChunks[2] +
-                "\\Desktop\\test install\\";
+                "\\Desktop\\" + installDirectoryName + "\\";
 
         System.out.println(" - Install Root - " + installRoot);
 

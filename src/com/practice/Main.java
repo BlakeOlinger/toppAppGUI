@@ -1,105 +1,53 @@
 package com.practice;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
+import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
 
-class Main extends Frame implements ActionListener {
-    private String message = "";
-    private ArrayList<String[]> DDTOequations;
-    private Path DDTOpath;
-    private Path configPath;
-    private Path swConfig;
-    private ArrayList<TextField> textFields;
-    private ArrayList<Label> labels;
-
-    private Main(ArrayList<String[]> DDTOequations, Path DDTOpath, Path configPath, Path swConfig, ArrayList<TextField> textFields, ArrayList<Label> labels) {
-        this.DDTOequations = DDTOequations;
-        this.DDTOpath = DDTOpath;
-        this.configPath = configPath;
-        this.swConfig = swConfig;
-        this.textFields = textFields;
-        this.labels = labels;
-
-        setLayout(new FlowLayout());
-
-        var index = 0;
-
-        for(TextField textField: textFields) {
-            textField.addActionListener(this);
-            add(labels.get(index++));
-            add(textField);
-        }
-
-            addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    System.out.println("TOPP App GUI - Exit");
-
-                    try {
-                        Files.writeString(swConfig, "11");
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    System.exit(0);
-                }
-            });
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        g.drawString(message, 50, 200);
-    }
-
-    // TODO - Get app to generate a dropdown list from C-HSSX.blemp
-    //  - equation list - have an input be available for that selection
-    //  - have the index used in the action performed function correlate
-    //  - to the input selection
+final class Main {
     public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
 
-        var startTime = System.currentTimeMillis();
+        var installRoot = InstallRoot.getInstallRoot("SolidWorks Daemon");
 
-        // FIXME - to check if installed and if not get install
-        //  - location from user without having to alter code
-        //  -- check for a given expected file like the config file
-        //  -- in the current directory - if not then prompt user
-        //  -- with file selector - directory only - set title to
-        //  -- set install directory - set that as the install root
-        //  -- variable
-        var installRoot = InstallRoot.getInstallRoot();
+        var installDirectory = Paths.get(installRoot);
 
-        var installRootPath = Paths.get(installRoot);
+        if (!ToppFiles.validateDirectory(
+                "Install",
+                installDirectory
+                )) {
+            return;
+        }
 
-        if (!ToppFiles.validateDirectory("Install", installRootPath))
+        if (!BlobDirectory.validateLocalBlobDatabaseInstance(installDirectory))
             return;
 
         var GUIconfigFileName = "GUI.config";
 
         var GUIconfigPath = Paths.get(installRoot + GUIconfigFileName);
 
-        if (!ToppFiles.validateFile(GUIconfigFileName, GUIconfigPath))
+        if (!ToppFiles.validateFile(GUIconfigFileName, GUIconfigPath)) {
             return;
+        }
 
-        Logger.cout(Level.INFO, GUIconfigFileName, "Initializing");
-    // FIXME - initializing was redundant - add argument to parameter
-        if (!ToppFiles.writeFile(
-                GUIconfigFileName,
-                GUIconfigPath,
-                "00",
-                "Initializing"))
+        if (!ToppFiles.writeFile(GUIconfigFileName, GUIconfigPath, "00")) {
             return;
+        }
 
-        Logger.cout(Level.INFO, GUIconfigFileName, "Initialized");
+        var SWexePath = Paths.get(installRoot + "NuSWDaemon.exe");
+
+        if (!Files.exists(SWexePath)) {
+            var swConfigFileName = "SWmicroservice.config";
+
+            var swConfigPath = Paths.get(installRoot + swConfigFileName);
+
+            if (!ToppFiles.validateFile(swConfigFileName, swConfigPath))
+                return;
+
+            if (!ToppFiles.writeFile(swConfigFileName, swConfigPath, "01!"))
+                return;
+        }
 
         var DDTOfileName = "DDTO.blemp";
 
@@ -107,57 +55,29 @@ class Main extends Frame implements ActionListener {
 
         if (!ToppFiles.validateFile(DDTOfileName, DDTOpath)) return;
 
-        Logger.cout(Level.INFO, DDTOfileName, "Initializing");
+        var blobDirectory = Paths.get(installDirectory + "\\blob\\");
 
-        if (!ToppFiles.writeFile(DDTOfileName, DDTOpath, ""))
+        var blempFiles = BlobDirectory.getAvailableBlempFiles(blobDirectory);
+
+        if (blempFiles == null) {
+            System.out.println(" - ERROR - No .blemp files found");
+
             return;
-
-        Logger.cout(Level.INFO, DDTOfileName, "Initialized");
-
-        var blempFileName = "C-HSSX.blemp";
-
-        var blempPath = Paths.get(installRoot + blempFileName);
-
-        var appendedEquationSegments = new ArrayList<String[]>();
-
-        if (!ToppFiles.validateFile(blempFileName, blempPath))
-            return;
-
-        if (Files.exists(blempPath)) {
-            System.out.println(" - Blemp File Found");
-        } else {
-            System.out.println(" - WARNING - No Blemp File Found");
-
-            try {
-
-                Files.createFile(blempPath);
-
-                if (Files.exists(blempPath)) {
-                    var equations = "\"OD@sketch1\"=$40#$in$!";
-
-                    Files.writeString(blempPath, equations);
-
-                    System.out.println(" - Blemp File - Created and Initialized");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                System.out.println("TOPP App GUI - Exit");
-
-                return;
-            }
         }
 
-        var swConfigFileName = "SWmicroservice.config";
+        var blempName = "";
 
-        var swConfig = Paths.get(installRoot + swConfigFileName);
-
-        if (checkForFile(swConfig, swConfigFileName)) return;
-
+        // FIXME - have to use a god damned data class object - can't pass things to the thread
         try {
-            var equations = Files.readString(blempPath)
-                    .split("!");
+            SwingUtilities.invokeAndWait(new RunEnvironment(blempFiles, blempName));
+        } catch (InterruptedException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
+        System.out.println(blempName);
+//        var equations = Files.readString(blempName)
+//                .split("!");
+/*
             System.out.println((" - Blemp File Equations - Count: " + equations.length));
 
             System.out.println(" - Blemp File Equations:");
@@ -244,17 +164,10 @@ class Main extends Frame implements ActionListener {
         }
 
         var appWindow = new Main(appendedEquationSegments, DDTOpath,
-                configPath, swConfig, textFields, labels);
-
-        appWindow.setTitle("TOPP App");
-        appWindow.setSize(800, 600);
-        appWindow.setVisible(true);
+                configPath, swConfigPath, textFields, labels);
 */
-        var stopTime = System.currentTimeMillis();
-
-        System.out.printf(" - App Start Time - %,d ms%n", stopTime - startTime);
     }
-
+/*
     @Override
     public void actionPerformed(ActionEvent e) {
         var canWrite = false;
@@ -321,13 +234,6 @@ class Main extends Frame implements ActionListener {
 
                     var DDTOequation = "";
 
-                    // FIXME - current config with DDTOequation only allows a single
-                    //  - equation to be entered at a time
-                    //  - forcing to clear user input
-                    //  -- add a check to see if value changed otherwise don't write to DDTO
-                    //  -- write new equations used to a buffer that lists the equations
-                    //  - in a similar format to the C-HSS.blemp file - this will be use
-                    //  - for creating the custom .blemp file if the user saves it
                     for (var i = 0; i < DDTOequationsCopy
                             .get(textEventIndex).length - 1; ++i)
                         DDTOequation += DDTOequationsCopy
@@ -377,4 +283,5 @@ class Main extends Frame implements ActionListener {
         setCursor(defaultCursor);
     }
 
+ */
 }

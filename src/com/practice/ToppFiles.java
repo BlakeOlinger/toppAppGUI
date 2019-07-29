@@ -4,71 +4,70 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-class ToppFiles {
+final class ToppFiles {
 
     static boolean validateFile(String fileName, Path path) {
-        Logger.cout(Level.INFO, fileName, "Validating");
-
-                if (Files.exists(path)) {
-            Logger.cout(Level.INFO, fileName, "File Found");
-        } else {
-            Logger.cout(Level.WARNING, fileName, "File Not Found");
-
+        if (!Files.exists(path)) {
             try {
+                System.out.println(" - " + fileName + " - Not Found");
+
                 Files.createFile(path);
-            } catch (IOException e) {
-                e.printStackTrace();
 
-                Logger.cout(Level.ERROR, fileName, "Could Not Create File");
-
-                return false;
-            }
-
-            Logger.cout(Level.INFO, fileName, "File Created");
-        }
-        return true;
-    }
-
-    static boolean validateDirectory(String fileName, Path path) {
-        Logger.cout(Level.INFO, fileName, "Directory - Validating");
-
-        if (Files.exists(path)) {
-            System.out.println(" - " + fileName + " Directory - Found");
-            Logger.cout(Level.INFO, fileName, "Directory - Found");
-
-            return true;
-        } else {
-            Logger.cout(Level.WARNING, fileName, "Directory - Not Found");
-
-            try {
-                Files.createDirectory(path);
-
-                Logger.cout(Level.INFO, fileName, "Directory - Created");
+                System.out.println(" - " + fileName + " - Created");
 
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
 
                 System.out.println("TOPP App GUI - Exit");
-                Logger.cout(Level.ERROR, fileName, "Could Not Create Directory");
+
+                return false;
+            }
+        } else {
+            System.out.println(" - " + fileName + " - Found");
+
+            return true;
+        }
+    }
+
+    static boolean validateDirectory(String directoryName, Path directoryPath) {
+
+        if (Files.exists(directoryPath)) {
+            System.out.println(" - " + directoryName + " Directory - Found");
+
+            return true;
+        } else {
+
+            try {
+                System.out.println(" - " + directoryName + " - Not Found");
+
+                Files.createDirectory(directoryPath);
+
+                System.out.println(" - " + directoryName + " - Directory Created");
+
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                System.out.println("TOPP App GUI - Exit");
 
                 return false;
             }
         }
     }
 
-    static boolean writeFile(String fileName, Path path, String writeMessage,) {
+    static boolean writeFile(String fileName, Path path, String writeMessage) {
+
         try {
             Files.writeString(path, writeMessage);
 
-            Logger.cout(Level.INFO, fileName, "Write - Success");
+            System.out.println(" - " + fileName + " - Successful Write");
 
             return true;
         } catch (IOException e) {
             e.printStackTrace();
 
-            Logger.cout(Level.ERROR, fileName, "Could Not Write to File");
-
+            System.out.println("TOPP App GUI - Exit");
             return false;
         }
     }
