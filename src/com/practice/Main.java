@@ -55,26 +55,26 @@ final class Main {
 
         if (!ToppFiles.validateFile(DDTOfileName, DDTOpath)) return;
 
-        var blobDirectory = Paths.get(installDirectory + "\\blob\\");
+        var baseBlobDirectory = Paths.get(installDirectory + "\\blob\\base\\");
 
-        var blempFiles = BlobDirectory.getAvailableBlempFiles(blobDirectory);
+        DataObject.baseBlempPaths = BlobDirectory.getAvailableBlempFiles(baseBlobDirectory);
 
-        if (blempFiles == null) {
+        if (DataObject.baseBlempPaths == null) {
             System.out.println(" - ERROR - No .blemp files found");
 
             return;
         }
 
-        var blempName = "";
-
-        // FIXME - have to use a god damned data class object - can't pass things to the thread
         try {
-            SwingUtilities.invokeAndWait(new RunEnvironment(blempFiles, blempName));
+            SwingUtilities.invokeAndWait(BlempSelectionWindow::getBlemp);
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
-        System.out.println(blempName);
+        BlempSelectionWindow.waitForUserSelection();
+
+
+//        System.out.println(blempName);
 //        var equations = Files.readString(blempName)
 //                .split("!");
 /*
