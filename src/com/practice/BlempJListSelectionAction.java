@@ -18,10 +18,10 @@ final class BlempJListSelectionAction implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        DataObject.userSelectedBlemp = Paths.get(nameList.getSelectedValue());
+        BlempSelectionDO.userSelectedBlemp = Paths.get(nameList.getSelectedValue());
 
         label.setText("You selected: "
-                + DataObject.userSelectedBlemp
+                + nameList.getSelectedValue()
                 + ". Use this template?");
 
         var selectButton = new JButton("Select");

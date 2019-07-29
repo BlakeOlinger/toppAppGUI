@@ -19,7 +19,7 @@ final class BlempSelectionButtonAction implements ActionListener {
             ex.printStackTrace();
         }
 
-        DataObject.userBlempSelectionSemaphore = false;
+        BlempSelectionDO.userBlempSelectionSemaphore = false;
 
         window.dispose();
     }

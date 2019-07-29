@@ -57,9 +57,9 @@ final class Main {
 
         var baseBlobDirectory = Paths.get(installDirectory + "\\blob\\base\\");
 
-        DataObject.baseBlempPaths = BlobDirectory.getAvailableBlempFiles(baseBlobDirectory);
+        BlempSelectionDO.baseBlempPaths = BlobDirectory.getAvailableBlempFiles(baseBlobDirectory);
 
-        if (DataObject.baseBlempPaths == null) {
+        if (BlempSelectionDO.baseBlempPaths == null) {
             System.out.println(" - ERROR - No .blemp files found");
 
             return;
@@ -71,8 +71,9 @@ final class Main {
             e.printStackTrace();
         }
 
-        BlempSelectionWindow.waitForUserSelection();
+        var userSelection = BlempSelectionWindow.waitForUserSelectionAndConsume();
 
+        System.out.println(userSelection);
 
 //        System.out.println(blempName);
 //        var equations = Files.readString(blempName)

@@ -2,6 +2,8 @@ package com.practice;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 final class BlempSelectionWindow extends JFrame{
     private BlempSelectionWindow(String label) {
@@ -9,9 +11,9 @@ final class BlempSelectionWindow extends JFrame{
     }
 
     static void getBlemp() {
-        DataObject.userBlempSelectionSemaphore = true;
+        BlempSelectionDO.userBlempSelectionSemaphore = true;
 
-        var paths = DataObject.baseBlempPaths;
+        var paths = BlempSelectionDO.baseBlempPaths;
 
         var window = new BlempSelectionWindow("Select a template file");
         window.setSize(1280, 720);
@@ -40,20 +42,25 @@ final class BlempSelectionWindow extends JFrame{
         window.setVisible(true);
     }
 
-    @Override
-    public void dispose() {
-        DataObject.userBlempSelectionSemaphore = false;
-
-        super.dispose();
-    }
-
-    static void waitForUserSelection() {
-        while (DataObject.userBlempSelectionSemaphore) {
+    static Path waitForUserSelectionAndConsume() {
+        while (BlempSelectionDO.userBlempSelectionSemaphore) {
             try {
                 Thread.sleep(400);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        var path = BlempSelectionDO.userSelectedBlemp;
+
+        BlempSelectionDO.userSelectedBlemp = null;
+
+        return path;
+    }
+
+    @Override
+    public void dispose() {
+        BlempSelectionDO.userBlempSelectionSemaphore = false;
+
+        super.dispose();
     }
 }
