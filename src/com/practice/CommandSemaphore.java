@@ -6,13 +6,12 @@ import java.nio.file.Files;
 class CommandSemaphore {
     static boolean open = true;
 
-    static void close() {
+    static boolean isOpen() {
         try {
-            Files.writeString(GUIconfigDO.GUIconfig, "01");
-
-            open = false;
+            return Files.readString(GUIconfigDO.GUIconfig).substring(1, 2).compareTo("0") == 0;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

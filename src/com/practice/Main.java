@@ -70,7 +70,7 @@ final class Main {
                 return;
 
             if (ToppFiles.writeFile(swConfigFileName,
-                    SWdaemonCommandDO.SWdaemonConfigPath, "01!"))
+                    SWdaemonCommandDO.SWdaemonConfigPath, "011!"))
                 return;
         }
 

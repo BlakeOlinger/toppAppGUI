@@ -1,15 +1,17 @@
 package com.practice;
 
 final class SWcommand {
-    static void submitCommand() {
-        ToppFiles.writeFile(
+    static void submitCommand(String action) {
+        if (CommandSemaphore.isOpen())
+            ToppFiles.writeFile(
                 "SWmicroservice.config",
                 SWdaemonCommandDO.SWdaemonConfigPath,
-                "00!" + BlobDO.blobPathString + "!");
+                action + BlobDO.blobPathString + "!");
     }
 
     static void writeEquationsToDDTO() {
-        ToppFiles.writeFile(
+        if (CommandSemaphore.isOpen())
+            ToppFiles.writeFile(
                 "DDTO.blemp",
                 DDTOdataObject.DDTOpath,
                 BlempDO.defaultConfigurationBuffer

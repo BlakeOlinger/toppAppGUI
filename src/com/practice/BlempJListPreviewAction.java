@@ -18,13 +18,12 @@ final class BlempJListPreviewAction {
                 System.out.println(" - blob file to load in preview - "
                         + BlobDO.blobPathString);
 
-                CommandSemaphore.close();
 
                 BlempUtil.populateDefaultConfiguration();
 
                 SWcommand.writeEquationsToDDTO();
 
-                SWcommand.submitCommand();
+                SWcommand.submitCommand(SWaction.ACTION_SENT);
             }
         }
     }

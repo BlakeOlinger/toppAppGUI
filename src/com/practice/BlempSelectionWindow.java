@@ -15,7 +15,7 @@ final class BlempSelectionWindow extends JFrame{
         var paths = BlempSelectionDO.baseBlempPaths;
 
         var window = new BlempSelectionWindow("Select a template file");
-        window.setSize(1280, 720);
+        window.setSize(700, 400);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLayout(new FlowLayout());
         var pathArray = new String[paths.size()];
@@ -56,6 +56,9 @@ final class BlempSelectionWindow extends JFrame{
     @Override
     public void dispose() {
         BlempSelectionDO.userBlempSelectionSemaphore = false;
+
+        ToppFiles.writeFile("SWmicroservice.config",
+                SWdaemonCommandDO.SWdaemonConfigPath, "111!");
 
         super.dispose();
     }
