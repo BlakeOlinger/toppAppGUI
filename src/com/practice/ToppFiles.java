@@ -15,18 +15,18 @@ final class ToppFiles {
 
                 System.out.println(" - " + fileName + " - Created");
 
-                return true;
+                return false;
             } catch (IOException e) {
                 e.printStackTrace();
 
                 System.out.println("TOPP App GUI - Exit");
 
-                return false;
+                return true;
             }
         } else {
             System.out.println(" - " + fileName + " - Found");
 
-            return true;
+            return false;
         }
     }
 
@@ -57,18 +57,17 @@ final class ToppFiles {
     }
 
     static boolean writeFile(String fileName, Path path, String writeMessage) {
-
         try {
             Files.writeString(path, writeMessage);
 
             System.out.println(" - " + fileName + " - Successful Write");
 
-            return true;
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
 
             System.out.println("TOPP App GUI - Exit");
-            return false;
+            return true;
         }
     }
 }

@@ -3,7 +3,6 @@ package com.practice;
 import javax.swing.*;
 import java.awt.*;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 final class BlempSelectionWindow extends JFrame{
     private BlempSelectionWindow(String label) {
@@ -42,7 +41,7 @@ final class BlempSelectionWindow extends JFrame{
         window.setVisible(true);
     }
 
-    static Path waitForUserSelectionAndConsume() {
+    static Path waitForAndGetUserSelection() {
         while (BlempSelectionDO.userBlempSelectionSemaphore) {
             try {
                 Thread.sleep(400);
@@ -50,11 +49,8 @@ final class BlempSelectionWindow extends JFrame{
                 e.printStackTrace();
             }
         }
-        var path = BlempSelectionDO.userSelectedBlemp;
 
-        BlempSelectionDO.userSelectedBlemp = null;
-
-        return path;
+        return BlempSelectionDO.userSelectedBlemp;
     }
 
     @Override

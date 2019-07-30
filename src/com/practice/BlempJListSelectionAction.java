@@ -20,6 +20,8 @@ final class BlempJListSelectionAction implements ListSelectionListener {
     public void valueChanged(ListSelectionEvent e) {
         BlempSelectionDO.userSelectedBlemp = Paths.get(nameList.getSelectedValue());
 
+        BlempJListPreviewAction.submitPreview();
+
         label.setText("You selected: "
                 + nameList.getSelectedValue()
                 + ". Use this template?");

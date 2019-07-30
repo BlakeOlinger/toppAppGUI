@@ -5,6 +5,28 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/*
+Steps to writing a command to SW daemon -
+ - CommandSemaphore.close()
+ - BlempUtil.populateDefaultConfiguration (for preview) or .populateCurrentConfiguration
+ - SWcommand.writeEquationsToDDTO()
+ - SWcommand.submitCommand()
+
+ -- Format --
+ the .blemp equation must take the form:
+    "O.D.@Sketch1"=$40#$in$!
+    - whole equations are deliminated via a !
+    - subsections are deliminated via a $
+    -- there are three subsections in non-branching equations
+    - the # symbol appends a significant value that the user can change
+ equations sent to the DDTO must take the form:
+    "O.D.@Sketch1"=40in!
+    - the only deliminator is a ! denoting whole equations
+ the blob info for the daemon to open that's sent to the SWmicroservice.config file
+    - must be in the form of "C-HSSX.blob.SLDPRT"
+    - no other path/directory info
+ */
+
 final class Main {
     public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
@@ -25,35 +47,40 @@ final class Main {
 
         var GUIconfigFileName = "GUI.config";
 
-        var GUIconfigPath = Paths.get(installRoot + GUIconfigFileName);
+        GUIconfigDO.GUIconfig = Paths.get(installRoot + GUIconfigFileName);
 
-        if (!ToppFiles.validateFile(GUIconfigFileName, GUIconfigPath)) {
+        if (ToppFiles.validateFile(GUIconfigFileName, GUIconfigDO.GUIconfig)) {
             return;
         }
 
-        if (!ToppFiles.writeFile(GUIconfigFileName, GUIconfigPath, "00")) {
+        if (ToppFiles.writeFile(GUIconfigFileName, GUIconfigDO.GUIconfig, "00")) {
             return;
         }
 
         var SWexePath = Paths.get(installRoot + "NuSWDaemon.exe");
 
+        var swConfigFileName = "SWmicroservice.config";
+
+        SWdaemonCommandDO.SWdaemonConfigPath = Paths.get(installRoot + swConfigFileName);
+
         if (!Files.exists(SWexePath)) {
-            var swConfigFileName = "SWmicroservice.config";
 
-            var swConfigPath = Paths.get(installRoot + swConfigFileName);
 
-            if (!ToppFiles.validateFile(swConfigFileName, swConfigPath))
+            if (ToppFiles.validateFile(swConfigFileName, SWdaemonCommandDO.SWdaemonConfigPath))
                 return;
 
-            if (!ToppFiles.writeFile(swConfigFileName, swConfigPath, "01!"))
+            if (ToppFiles.writeFile(swConfigFileName,
+                    SWdaemonCommandDO.SWdaemonConfigPath, "01!"))
                 return;
         }
 
         var DDTOfileName = "DDTO.blemp";
 
-        var DDTOpath = Paths.get(installRoot + DDTOfileName);
+        DDTOdataObject.DDTOpath = Paths.get(installRoot + DDTOfileName);
 
-        if (!ToppFiles.validateFile(DDTOfileName, DDTOpath)) return;
+        if (ToppFiles.validateFile(DDTOfileName, DDTOdataObject.DDTOpath)) return;
+
+        if (ToppFiles.writeFile(DDTOfileName, DDTOdataObject.DDTOpath, "")) return;
 
         var baseBlobDirectory = Paths.get(installDirectory + "\\blob\\");
 
@@ -71,7 +98,7 @@ final class Main {
             e.printStackTrace();
         }
 
-        var userSelection = BlempSelectionWindow.waitForUserSelectionAndConsume();
+        var userSelection = BlempSelectionWindow.waitForAndGetUserSelection();
 
         System.out.println(userSelection);
 
