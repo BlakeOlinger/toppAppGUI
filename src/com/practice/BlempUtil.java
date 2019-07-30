@@ -38,7 +38,10 @@ final class BlempUtil {
         try {
             var tmpArray = Files.readString(BlempSelectionDO.userSelectedBlemp).split("!");
 
-            for (var i = 0; i < tmpArray.length - 1; ++i)
+            // TODO - check if a single equation requires
+            //   - tmpArray.length - 1; else seems to
+            //   - require it not be there
+            for (var i = 0; i < tmpArray.length; ++i)
                 BlempDO.equationList.add(tmpArray[i]);
 
             BlempDO.equationList.forEach(System.out::println);
