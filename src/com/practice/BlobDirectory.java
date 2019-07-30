@@ -15,6 +15,27 @@ final class BlobDirectory {
         if (Files.exists(fileCheck)) {
             System.out.println(" - Local Blob Database Instance - Found");
 
+            if (!Files.exists(Paths.get(installDirectory.toString() + "\\toppAppDBdaemon.jar"))) {
+                if (Internet.connected()) {
+                    System.out.println(" - Syncing local database instance with remote");
+
+                    try {
+                        var process = new ProcessBuilder("cmd.exe", "/c", "cd",
+                                installDirectory.toString() + "\\blob", "&&", "git", "pull")
+                                .start();
+
+                        process.waitFor();
+
+                        process.destroy();
+
+                        System.out.println(" - Local database instance updated");
+                    } catch (InterruptedException | IOException e) {
+                        e.printStackTrace();
+                    }
+                } else
+                    System.out.println(" - Could not update local database instance - no internet connection");
+            }
+
             return true;
         } else {
 
@@ -25,10 +46,6 @@ final class BlobDirectory {
                     var process = new ProcessBuilder("cmd.exe", "/c", "cd",
                             installDirectory.toString(), "&&", "git", "clone",
                             "https://github.com/BlakeOlinger/blob").start();
-
-                    process.waitFor();
-
-                    process.destroy();
 
                     process.waitFor();
 

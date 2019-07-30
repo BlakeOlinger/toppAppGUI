@@ -55,7 +55,7 @@ final class Main {
 
         if (!ToppFiles.validateFile(DDTOfileName, DDTOpath)) return;
 
-        var baseBlobDirectory = Paths.get(installDirectory + "\\blob\\base\\");
+        var baseBlobDirectory = Paths.get(installDirectory + "\\blob\\");
 
         BlempSelectionDO.baseBlempPaths = BlobDirectory.getAvailableBlempFiles(baseBlobDirectory);
 
