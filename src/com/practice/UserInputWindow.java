@@ -21,6 +21,7 @@ class UserInputWindow extends JFrame {
 
         var labels = new JLabel[BlempDO.equationList.size()];
         var textFields = new JTextField[BlempDO.equationList.size()];
+        var currentValueLabels = new JLabel[BlempDO.equationList.size()];
 
         for (var i = 0; i < labels.length; ++i) {
             labels[i] = new JLabel(BlempDO.equationList
@@ -28,8 +29,17 @@ class UserInputWindow extends JFrame {
                     .split("=")[0]
                     + " = ");
             textFields[i] = new JTextField(5);
+            currentValueLabels[i] = new JLabel(
+                    " current: " +
+                    BlempDO.equationSegmentsList.get(i) [
+                            Integer.parseInt(BlempDO.equationSegmentsList.get(i)[
+                            BlempDO.equationSegmentsList.get(i).length - 1
+                            ])]
+                            .replace("#", "")
+            );
             window.add(labels[i]);
             window.add(textFields[i]);
+            window.add(currentValueLabels[i]);
         }
 
         window.setVisible(true);

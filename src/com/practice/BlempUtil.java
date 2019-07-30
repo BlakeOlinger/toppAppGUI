@@ -49,11 +49,22 @@ final class BlempUtil {
         }
     }
 
-
     static void getEquationSegments() {
-        for (String equation: BlempDO.equationList)
-            BlempDO.equationSegmentsList.add(equation.split("\\$"));
+        for (String equation: BlempDO.equationList) {
+            var tmpArray = new String[equation.split("\\$").length + 1];
+            var copyArray = equation.split("\\$");
 
+            for (var i = 0; i < copyArray.length; ++i) {
+                if (copyArray[i].contains("#"))
+                    tmpArray[tmpArray.length - 1] = String.valueOf(i);
 
+                tmpArray[i] = copyArray[i];
+            }
+
+            BlempDO.equationSegmentsList.add(tmpArray);
+        }
+
+        for (String[] segments: BlempDO.equationSegmentsList)
+            System.out.println(segments[segments.length - 1]);
     }
 }
