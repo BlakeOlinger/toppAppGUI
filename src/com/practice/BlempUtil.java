@@ -67,4 +67,25 @@ final class BlempUtil {
         for (String[] segments: BlempDO.equationSegmentsList)
             System.out.println(segments[segments.length - 1]);
     }
+
+    static void populateCurrentConfiguration() {
+        var currentStringEquationBuffer = "";
+
+        for (var i = 0; i < BlempDO.equationList.size(); ++i) {
+            for (var j = 0; j < BlempDO.equationSegmentsList.get(i).length - 1; ++j) {
+                var significantIndex = Integer.parseInt(BlempDO.equationSegmentsList.get(i)[
+                        BlempDO.equationSegmentsList.get(i).length - 1
+                        ]);
+                if (j == significantIndex)
+                    currentStringEquationBuffer += BlempDO.userInputValue;
+                else
+                    currentStringEquationBuffer += BlempDO.equationSegmentsList.get(i)[j];
+            }
+            currentStringEquationBuffer += "!";
+        }
+
+        BlempDO.currentEquationBuffer = currentStringEquationBuffer
+                .replace("$", "")
+                .replace("#", "");
+    }
 }

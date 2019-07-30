@@ -9,12 +9,21 @@ final class SWcommand {
                 action + BlobDO.blobPathString + "!");
     }
 
-    static void writeEquationsToDDTO() {
+    static void writeDefaultEquationsToDDTO() {
         if (CommandSemaphore.isOpen())
             ToppFiles.writeFile(
                 "DDTO.blemp",
                 DDTOdataObject.DDTOpath,
                 BlempDO.defaultConfigurationBuffer
         );
+    }
+
+    static void writeCurrentEquationsToDDTO() {
+        if (CommandSemaphore.isOpen())
+            ToppFiles.writeFile(
+                    "DDTO.blemp",
+                    DDTOdataObject.DDTOpath,
+                    BlempDO.currentEquationBuffer
+            );
     }
 }

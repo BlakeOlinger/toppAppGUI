@@ -21,7 +21,7 @@ final class BlempJListPreviewAction {
 
                 BlempUtil.populateDefaultConfiguration();
 
-                SWcommand.writeEquationsToDDTO();
+                SWcommand.writeDefaultEquationsToDDTO();
 
                 SWcommand.submitCommand(SWaction.ACTION_SENT);
             }

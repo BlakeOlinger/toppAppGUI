@@ -22,6 +22,7 @@ class UserInputWindow extends JFrame {
         var labels = new JLabel[BlempDO.equationList.size()];
         var textFields = new JTextField[BlempDO.equationList.size()];
         var currentValueLabels = new JLabel[BlempDO.equationList.size()];
+        var userActions = new UserInputAction[BlempDO.equationList.size()];
 
         for (var i = 0; i < labels.length; ++i) {
             labels[i] = new JLabel(BlempDO.equationList
@@ -37,6 +38,9 @@ class UserInputWindow extends JFrame {
                             ])]
                             .replace("#", "")
             );
+            userActions[i] = new UserInputAction(currentValueLabels[i],
+                    textFields[i]);
+            textFields[i].addActionListener(userActions[i]);
             window.add(labels[i]);
             window.add(textFields[i]);
             window.add(currentValueLabels[i]);
