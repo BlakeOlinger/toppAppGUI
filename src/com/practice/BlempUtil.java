@@ -33,4 +33,27 @@ final class BlempUtil {
             return null;
         }
     }
+
+    static void getEquations() {
+        try {
+            var tmpArray = Files.readString(BlempSelectionDO.userSelectedBlemp).split("!");
+
+            for (var i = 0; i < tmpArray.length - 1; ++i)
+                BlempDO.equationList.add(tmpArray[i]);
+
+            BlempDO.equationList.forEach(System.out::println);
+
+            System.out.println(BlempDO.equationList.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    static void getEquationSegments() {
+        for (String equation: BlempDO.equationList)
+            BlempDO.equationSegmentsList.add(equation.split("\\$"));
+
+
+    }
 }
