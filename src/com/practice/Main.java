@@ -102,6 +102,19 @@ final class Main {
 
         System.out.println(userSelection);
 
+        if (userSelection != null) {
+            try {
+                SwingUtilities.invokeAndWait(UserInputWindow::createWindow);
+            } catch (InterruptedException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+            UserInputWindow.waitFor();
+        }
+
+        ToppFiles.writeFile("SWmicroservice.config",
+                SWdaemonCommandDO.SWdaemonConfigPath, "111!");
+
 //        System.out.println(blempName);
 //        var equations = Files.readString(blempName)
 //                .split("!");

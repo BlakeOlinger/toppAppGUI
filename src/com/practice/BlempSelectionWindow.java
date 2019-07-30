@@ -57,9 +57,6 @@ final class BlempSelectionWindow extends JFrame{
     public void dispose() {
         BlempSelectionDO.userBlempSelectionSemaphore = false;
 
-        ToppFiles.writeFile("SWmicroservice.config",
-                SWdaemonCommandDO.SWdaemonConfigPath, "111!");
-
         super.dispose();
     }
 }
