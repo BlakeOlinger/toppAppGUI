@@ -12,10 +12,10 @@ final class BlempSelectionWindow extends JFrame{
         var paths = BlempSelectionDO.baseBlempPaths;
 
         var window = new BlempSelectionWindow("Select a template file");
-        window.setSize(550, 200);
+        window.setSize(650, 200);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLayout(new FlowLayout());
-        window.setLocation(170, 0);
+        window.setLocation(270, 0);
         var pathArray = new String[paths.size()];
 
         for (var i = 0; i < paths.size(); ++i)

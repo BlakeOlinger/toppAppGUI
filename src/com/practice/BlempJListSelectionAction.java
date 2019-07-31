@@ -15,7 +15,7 @@ final class BlempJListSelectionAction implements ListSelectionListener {
         this.label = label;
         this.window = window;
     }
-
+    // FIXME - preview listed select and adjust blemp twice on same window
     @Override
     public void valueChanged(ListSelectionEvent e) {
         BlempSelectionDO.userSelectedBlemp = Paths.get(nameList.getSelectedValue());

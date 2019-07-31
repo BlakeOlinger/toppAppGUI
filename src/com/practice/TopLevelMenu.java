@@ -20,7 +20,7 @@ final class TopLevelMenu extends JFrame {
         var window = new TopLevelMenu("TOPP App");
         window.setLayout(new FlowLayout());
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        window.setSize(170, 190);
+        window.setSize(270, 190);
 
         window.add(
                 MenuButton.getInstance(

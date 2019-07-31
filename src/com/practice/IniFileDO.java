@@ -93,8 +93,13 @@ class IniFileDO {
     private static void initialize() {
         userIniConfig = "";
 
-        for (String key: keys)
+
+
+        for (String key: keys) {
             userIniConfig += "0";
+
+            initFields.put(key, true);
+        }
     }
 
     static void setIniToDefaults() {

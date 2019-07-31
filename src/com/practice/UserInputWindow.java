@@ -9,10 +9,10 @@ class UserInputWindow extends JFrame {
 
     static void createWindow() {
         var window = new UserInputWindow("Input Custom Configuration Values");
-        window.setSize(270, 200);
+        window.setSize(370, 200);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLayout(new FlowLayout());
-        window.setLocation(450, 200);
+        window.setLocation(550, 200);
 
         BlempUtil.getEquations();
 
