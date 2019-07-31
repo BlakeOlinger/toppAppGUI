@@ -23,7 +23,7 @@ final class BlempJListPreviewAction {
 
                 SWcommand.writeDefaultEquationsToDDTO();
 
-                SWcommand.submitCommand(SWaction.ACTION_SENT);
+                SWcommand.submitCommandOnBlob(SWaction.ACTION_SENT);
             }
         }
     }

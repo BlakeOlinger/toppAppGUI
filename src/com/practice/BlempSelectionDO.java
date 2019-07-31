@@ -6,5 +6,4 @@ import java.util.ArrayList;
 final class BlempSelectionDO {
     static ArrayList<Path> baseBlempPaths = new ArrayList<>();
     static Path userSelectedBlemp;
-    static boolean userBlempSelectionSemaphore = false;
 }

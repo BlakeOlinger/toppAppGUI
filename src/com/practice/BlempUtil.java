@@ -35,12 +35,11 @@ final class BlempUtil {
     }
 
     static void getEquations() {
+        BlempDO.equationList.clear();
+
         try {
             var tmpArray = Files.readString(BlempSelectionDO.userSelectedBlemp).split("!");
 
-            // TODO - check if a single equation requires
-            //   - tmpArray.length - 1; else seems to
-            //   - require it not be there
             for (var i = 0; i < tmpArray.length; ++i)
                 BlempDO.equationList.add(tmpArray[i]);
 
@@ -53,6 +52,8 @@ final class BlempUtil {
     }
 
     static void getEquationSegments() {
+        BlempDO.equationSegmentsList.clear();
+
         for (String equation: BlempDO.equationList) {
             var tmpArray = new String[equation.split("\\$").length + 1];
             var copyArray = equation.split("\\$");

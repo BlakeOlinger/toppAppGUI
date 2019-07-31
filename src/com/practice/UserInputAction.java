@@ -25,6 +25,6 @@ final class UserInputAction implements ActionListener {
 
         SWcommand.writeCurrentEquationsToDDTO();
 
-        SWcommand.submitCommand(SWaction.ACTION_SENT);
+        SWcommand.submitCommandOnBlob(SWaction.ACTION_SENT);
     }
 }

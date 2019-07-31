@@ -33,5 +33,12 @@ final class BlempJListSelectionAction implements ListSelectionListener {
         selectButton.addActionListener(action);
 
         window.add(selectButton);
+
+        window.add(
+                MenuButton.getInstance(
+                        "Adjust Blemp",
+                        event -> System.out.println("Adjust Blemp detected")
+                )
+        );
     }
 }

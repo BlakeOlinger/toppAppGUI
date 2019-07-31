@@ -19,8 +19,6 @@ final class BlempSelectionButtonAction implements ActionListener {
             ex.printStackTrace();
         }
 
-        BlempSelectionDO.userBlempSelectionSemaphore = false;
-
-        window.dispose();
+        SwingUtilities.invokeLater(UserInputWindow::createWindow);
     }
 }
