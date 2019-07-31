@@ -15,6 +15,7 @@ final class BlempSelectionWindow extends JFrame{
         window.setSize(550, 200);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLayout(new FlowLayout());
+        window.setLocation(170, 0);
         var pathArray = new String[paths.size()];
 
         for (var i = 0; i < paths.size(); ++i)

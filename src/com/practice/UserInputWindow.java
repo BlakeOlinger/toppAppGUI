@@ -12,6 +12,7 @@ class UserInputWindow extends JFrame {
         window.setSize(270, 200);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLayout(new FlowLayout());
+        window.setLocation(450, 200);
 
         BlempUtil.getEquations();
 

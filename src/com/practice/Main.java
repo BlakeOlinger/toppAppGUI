@@ -44,6 +44,14 @@ final class Main {
         if (!BlobDirectory.validateLocalBlobDatabaseInstance(installDirectory))
             return;
 
+        var GUIiniFileName = "GUI.ini";
+
+        IniFileDO.path = Paths.get(installRoot + GUIiniFileName);
+
+        if (ToppFiles.validateFile(GUIiniFileName, IniFileDO.path)) return;
+
+        IniFileDO.getCurrentUserIniSettings();
+
         var GUIconfigFileName = "GUI.config";
 
         GUIconfigDO.GUIconfig = Paths.get(installRoot + GUIconfigFileName);
@@ -75,7 +83,9 @@ final class Main {
             }
         }
 
-        if (Files.exists(SWexePath))
+        if (Files.exists(SWexePath) && IniFileDO.getFieldValue(
+                IniFileDO.ON_START_START_SW
+        ))
             ForkJoinPool.commonPool().execute(new SWDaemonProcess(SWexePath));
 
         var DDTOfileName = "DDTO.blemp";
@@ -100,7 +110,17 @@ final class Main {
 
         TopLevelMenu.waitFor();
 
-         SWcommand.submitCommand(SWaction.EXIT_SW_DAEMON);
+        if (IniFileDO.getFieldValue(
+                IniFileDO.ON_EXIT_CLOSE_SW
+        ))
+            SWcommand.submitCommand(SWaction.EXIT_SW_DAEMON);
+
+        if (IniFileDO.getFieldValue(
+                IniFileDO.ON_EXIT_CLOSE_SW_PART
+        ) && !IniFileDO.getFieldValue(
+                IniFileDO.ON_EXIT_CLOSE_SW
+        ))
+            SWcommand.submitCommand(SWaction.CLOSE_SW_PART);
 
         System.exit(0);
     }
