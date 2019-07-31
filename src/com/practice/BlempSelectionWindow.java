@@ -8,7 +8,7 @@ final class BlempSelectionWindow extends JFrame{
         super(label);
     }
 
-    static void getBlemp() {
+    static void createWindow() {
         var paths = BlempSelectionDO.baseBlempPaths;
 
         var window = new BlempSelectionWindow("Select a template file");

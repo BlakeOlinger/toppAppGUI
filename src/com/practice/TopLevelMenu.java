@@ -14,13 +14,13 @@ final class TopLevelMenu extends JFrame {
         super(title);
     }
 
-    static void instantiateWindow() {
+    static void createWindow() {
         semaphore = true;
 
         var window = new TopLevelMenu("TOPP App");
         window.setLayout(new FlowLayout());
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        window.setSize(170, 170);
+        window.setSize(170, 190);
 
         window.add(
                 MenuButton.getInstance(
@@ -39,7 +39,7 @@ final class TopLevelMenu extends JFrame {
         window.add(
                 MenuButton.getInstance(
                         "Test",
-                        e -> SwingUtilities.invokeLater(BlempSelectionWindow::getBlemp)
+                        e -> SwingUtilities.invokeLater(BlempSelectionWindow::createWindow)
                 )
         );
 
@@ -54,6 +54,13 @@ final class TopLevelMenu extends JFrame {
                 MenuButton.getInstance(
                         "Exit SolidWorks Daemon",
                         e -> SWcommand.submitCommand(SWaction.EXIT_SW_DAEMON)
+                )
+        );
+
+        window.add(
+                MenuButton.getInstance(
+                        "Settings",
+                        e -> SwingUtilities.invokeLater(UserSettingsWindow::createWindow)
                 )
         );
 

@@ -106,7 +106,7 @@ final class Main {
             return;
         }
 
-        TopLevelMenu.instantiateWindow();
+        TopLevelMenu.createWindow();
 
         TopLevelMenu.waitFor();
 

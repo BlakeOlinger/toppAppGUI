@@ -10,7 +10,7 @@ class IniFileDO {
     static final String ON_EXIT_CLOSE_SW = "onExit_CloseSWdaemon";
     static final String ON_START_START_SW = "onStart_StartSWdaemon";
     static final String ON_EXIT_CLOSE_SW_PART = "onExit_CloseSWpart";
-    private static final String[] keys = new String[] {
+    static final String[] keys = new String[] {
             ON_EXIT_CLOSE_SW,
             ON_START_START_SW,
             ON_EXIT_CLOSE_SW_PART
@@ -27,7 +27,10 @@ class IniFileDO {
     static void setField(String field, Boolean value) {
         initFields.put(field, value);
 
-        setUserIniConfig();
+        userIniConfig = "";
+
+        for (var i = 0; i < keys.length; ++i)
+            userIniConfig += initFields.get(keys[i]) ? "0" : "1";
 
         ToppFiles.writeFile(
                 "User Ini File",
@@ -76,8 +79,6 @@ class IniFileDO {
             } else {
                 initialize();
 
-                userIniConfig = "000";
-
                 ToppFiles.writeFile(
                         "User Ini File",
                         path,
@@ -90,9 +91,10 @@ class IniFileDO {
     }
 
     private static void initialize() {
-        initFields.put("onExit_CloseSWdaemon", true);
-        initFields.put("onStart_StartSWdaemon", true);
-        initFields.put("onExit_CloseSWpart", true);
+        userIniConfig = "";
+
+        for (String key: keys)
+            userIniConfig += "0";
     }
 
     static void setIniToDefaults() {
@@ -103,6 +105,12 @@ class IniFileDO {
                 path,
                 userIniConfig
         );
+
+        try {
+            System.out.println(Files.readString(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
