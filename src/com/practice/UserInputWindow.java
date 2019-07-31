@@ -37,7 +37,7 @@ class UserInputWindow extends JFrame {
                             .replace("#", "")
             );
             userActions[i] = new UserInputAction(currentValueLabels[i],
-                    textFields[i]);
+                    textFields[i], i);
             textFields[i].addActionListener(userActions[i]);
             window.add(labels[i]);
             window.add(textFields[i]);

@@ -75,7 +75,8 @@ final class Main {
             }
         }
 
-        ForkJoinPool.commonPool().execute(new SWDaemonProcess(SWexePath));
+        if (Files.exists(SWexePath))
+            ForkJoinPool.commonPool().execute(new SWDaemonProcess(SWexePath));
 
         var DDTOfileName = "DDTO.blemp";
 
@@ -99,6 +100,8 @@ final class Main {
 
         TopLevelMenu.waitFor();
 
-        SWcommand.submitCommand(SWaction.EXIT_SW_DAEMON);
+         SWcommand.submitCommand(SWaction.EXIT_SW_DAEMON);
+
+        System.exit(0);
     }
 }

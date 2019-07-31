@@ -72,24 +72,26 @@ final class BlempUtil {
             System.out.println(segments[segments.length - 1]);
     }
 
-    static void populateCurrentConfiguration() {
+    static void populateCurrentConfiguration(int index) {
         var currentStringEquationBuffer = "";
 
         for (var i = 0; i < BlempDO.equationList.size(); ++i) {
-            for (var j = 0; j < BlempDO.equationSegmentsList.get(i).length - 1; ++j) {
-                var significantIndex = Integer.parseInt(BlempDO.equationSegmentsList.get(i)[
-                        BlempDO.equationSegmentsList.get(i).length - 1
-                        ]);
-                if (j == significantIndex)
-                    currentStringEquationBuffer += BlempDO.userInputValue;
-                else
-                    currentStringEquationBuffer += BlempDO.equationSegmentsList.get(i)[j];
+            if (index == i) {
+                for (var j = 0; j < BlempDO.equationSegmentsList.get(i).length - 1; ++j) {
+                    var significantIndex = Integer.parseInt(BlempDO.equationSegmentsList.get(i)[
+                            BlempDO.equationSegmentsList.get(i).length - 1
+                            ]);
+                    if (j == significantIndex)
+                        currentStringEquationBuffer += BlempDO.userInputValue;
+                    else
+                        currentStringEquationBuffer += BlempDO.equationSegmentsList.get(i)[j];
+                }
+                currentStringEquationBuffer += "!";
             }
-            currentStringEquationBuffer += "!";
-        }
 
-        BlempDO.currentEquationBuffer = currentStringEquationBuffer
-                .replace("$", "")
-                .replace("#", "");
+            BlempDO.currentEquationBuffer = currentStringEquationBuffer
+                    .replace("$", "")
+                    .replace("#", "");
+        }
     }
 }
