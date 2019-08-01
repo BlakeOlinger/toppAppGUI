@@ -18,12 +18,6 @@ class IniFileDO {
     private static HashMap<String, Boolean> initFields = new HashMap<>();
     static private String userIniConfig = "";
 
-    static void getCurrentUserIniSettings() {
-        setUserIniConfig();
-
-        System.out.println(userIniConfig);
-    }
-
     static void setField(String field, Boolean value) {
         initFields.put(field, value);
 
@@ -46,36 +40,24 @@ class IniFileDO {
     private static boolean[] checkBool(String input, int endIndex) {
         var boolArray = new boolean[endIndex + 1];
 
-        System.out.println(" Raw GUI.ini string - " + input);
-
-        for (var i = 0; i <= endIndex; ++i) {
+        for (var i = 0; i <= endIndex; ++i)
             boolArray[i] = input.substring(i, i + 1).compareTo("0") == 0;
-            System.out.println(" bool array at " + i + " - " +boolArray[i]);
-        }
 
         return boolArray;
     }
 
-    private static void setUserIniConfig() {
+    static void setUserIniConfig() {
         try {
             if (Files.exists(PathsList.userIni) && !Files.readString(PathsList.userIni).isEmpty()) {
                 var rawIniFile = Files.readString(PathsList.userIni);
 
                 var boolArray = checkBool(rawIniFile, keys.length - 1);
 
-                for (var i = 0; i < keys.length; ++i) {
-                    System.out.println("Key: " + keys[i] + " Value: " + boolArray[i]);
+                for (var i = 0; i < keys.length; ++i)
                     initFields.put(keys[i], boolArray[i]);
-                }
 
-                System.out.println("Map contents:");
-                for (var i = 0; i < keys.length; ++i) {
-                    System.out.println("Key: " + keys[i] + " Value: " + initFields.get(keys[i]));
-
+                for (var i = 0; i < keys.length; ++i)
                     userIniConfig += initFields.get(keys[i]) ? "0" : "1";
-                }
-
-                System.out.println("User Config: " + userIniConfig);
             } else {
                 initialize();
 
@@ -85,6 +67,7 @@ class IniFileDO {
                         userIniConfig
                 );
             }
+            System.out.println(" - GUI.ini - Settings Applied");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,8 +75,6 @@ class IniFileDO {
 
     private static void initialize() {
         userIniConfig = "";
-
-
 
         for (String key: keys) {
             userIniConfig += "0";
@@ -110,12 +91,6 @@ class IniFileDO {
                 PathsList.userIni,
                 userIniConfig
         );
-
-        try {
-            System.out.println(Files.readString(PathsList.userIni));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }

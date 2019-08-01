@@ -13,4 +13,5 @@ final class PathsList {
     static Path userSelectedBlemp = null;
     static String blobString = null;
     static Path previewConfig = null;
+    static Path DBdaemon = null;
 }

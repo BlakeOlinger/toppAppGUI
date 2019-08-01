@@ -42,8 +42,13 @@ final class Main {
             return;
         }
 
-        if (!BlobDirectory.validateLocalBlobDatabaseInstance(installDirectory))
-            return;
+        var DBdaemonFileName = "toppAppDBdaemon.jar";
+
+        PathsList.DBdaemon = Paths.get(installRoot + DBdaemonFileName);
+
+        if (!Files.exists(PathsList.DBdaemon))
+            if (!BlobDirectory.validateLocalBlobDatabaseInstance(installDirectory))
+                return;
 
         var GUIiniFileName = "GUI.ini";
 
@@ -51,19 +56,17 @@ final class Main {
 
         if (ToppFiles.validateFile(GUIiniFileName, PathsList.userIni)) return;
 
-        IniFileDO.getCurrentUserIniSettings();
+        IniFileDO.setUserIniConfig();
 
         var GUIconfigFileName = "GUI.config";
 
         PathsList.toppAppConfig = Paths.get(installRoot + GUIconfigFileName);
 
-        if (ToppFiles.validateFile(GUIconfigFileName, PathsList.toppAppConfig)) {
+        if (ToppFiles.validateFile(GUIconfigFileName, PathsList.toppAppConfig))
             return;
-        }
 
-        if (ToppFiles.writeFile(GUIconfigFileName, PathsList.toppAppConfig, Commands.GUI_INIT)) {
+        if (ToppFiles.writeFile(GUIconfigFileName, PathsList.toppAppConfig, Commands.GUI_INIT))
             return;
-        }
 
         PathsList.SWexe = Paths.get(installRoot + "NuSWDaemon.exe");
 
@@ -72,19 +75,15 @@ final class Main {
         PathsList.SWconfig = Paths.get(installRoot + swConfigFileName);
 
         if (!Files.exists(PathsList.SWexe)) {
-            if (ToppFiles.validateFile(swConfigFileName, PathsList.SWconfig)) {
+            if (ToppFiles.validateFile(swConfigFileName, PathsList.SWconfig))
                 return;
-            }
 
             if (ToppFiles.writeFile(swConfigFileName,
-                    PathsList.SWconfig, Commands.SW_DAEMON_INIT)) {
+                    PathsList.SWconfig, Commands.SW_DAEMON_INIT))
                 return;
-            }
         }
 
-        if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(
-                IniFileDO.ON_START_START_SW
-        ))
+        if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(IniFileDO.ON_START_START_SW))
             new ExecuteProcess(PathsList.SWexe.toString()).execute();
 
         var DDTOfileName = "DDTO.blemp";
@@ -111,13 +110,11 @@ final class Main {
 
         if  (!Files.exists(PathsList.previewConfig)) {
 
-            if (ToppFiles.validateFile(previewConfigFileName, PathsList.previewConfig)) {
+            if (ToppFiles.validateFile(previewConfigFileName, PathsList.previewConfig))
                 return;
-            }
 
-            if (ToppFiles.writeFile(previewConfigFileName, PathsList.previewConfig, Commands.PROGRAM_INIT)) {
+            if (ToppFiles.writeFile(previewConfigFileName, PathsList.previewConfig, Commands.PROGRAM_INIT))
                 return;
-            }
         }
 
 
