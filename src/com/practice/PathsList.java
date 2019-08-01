@@ -12,4 +12,5 @@ final class PathsList {
     static ArrayList<Path> baseBlempPaths = new ArrayList<>();
     static Path userSelectedBlemp = null;
     static String blobString = null;
+    static Path previewConfig = null;
 }

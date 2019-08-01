@@ -1,12 +1,9 @@
 package com.practice;
 
-import com.lib.BlobDirectory;
-import com.lib.InstallRoot;
-import com.lib.ToppFiles;
+import com.lib.*;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.concurrent.ForkJoinPool;
 
 /*
 Steps to writing a command to SW daemon -
@@ -64,7 +61,7 @@ final class Main {
             return;
         }
 
-        if (ToppFiles.writeFile(GUIconfigFileName, PathsList.toppAppConfig, "00")) {
+        if (ToppFiles.writeFile(GUIconfigFileName, PathsList.toppAppConfig, Commands.GUI_INIT)) {
             return;
         }
 
@@ -80,7 +77,7 @@ final class Main {
             }
 
             if (ToppFiles.writeFile(swConfigFileName,
-                    PathsList.SWconfig, "011!")) {
+                    PathsList.SWconfig, Commands.SW_DAEMON_INIT)) {
                 return;
             }
         }
@@ -88,7 +85,7 @@ final class Main {
         if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(
                 IniFileDO.ON_START_START_SW
         ))
-            ForkJoinPool.commonPool().execute(new SWDaemonProcess(PathsList.SWexe));
+            new ExecuteProcess(PathsList.SWexe.toString()).execute();
 
         var DDTOfileName = "DDTO.blemp";
 
@@ -108,16 +105,17 @@ final class Main {
             return;
         }
 
-        if  (!Files.exists(Paths.get(installRoot + "toppAPPpreview.jar"))) {
-            var configFileName = "toppAppPreview.config";
+        var previewConfigFileName = "toppAppPreview.config";
 
-            var configFilePath = Paths.get(installRoot + configFileName);
+        PathsList.previewConfig = Paths.get(installRoot + previewConfigFileName);
 
-            if (ToppFiles.validateFile(configFileName, configFilePath)) {
+        if  (!Files.exists(PathsList.previewConfig)) {
+
+            if (ToppFiles.validateFile(previewConfigFileName, PathsList.previewConfig)) {
                 return;
             }
 
-            if (ToppFiles.writeFile(configFileName, configFilePath, "0")) {
+            if (ToppFiles.writeFile(previewConfigFileName, PathsList.previewConfig, Commands.PROGRAM_INIT)) {
                 return;
             }
         }
@@ -130,14 +128,14 @@ final class Main {
         if (IniFileDO.getFieldValue(
                 IniFileDO.ON_EXIT_CLOSE_SW
         ))
-            SWcommand.submitCommand(SWaction.EXIT_SW_DAEMON);
+            SWcommand.submitCommand(Commands.SWDaemon.EXIT);
 
         if (IniFileDO.getFieldValue(
                 IniFileDO.ON_EXIT_CLOSE_SW_PART
         ) && !IniFileDO.getFieldValue(
                 IniFileDO.ON_EXIT_CLOSE_SW
         ))
-            SWcommand.submitCommand(SWaction.CLOSE_SW_PART);
+            SWcommand.submitCommand(Commands.SWDaemon.CLOSE_SW_PART);
 
         System.exit(0);
     }

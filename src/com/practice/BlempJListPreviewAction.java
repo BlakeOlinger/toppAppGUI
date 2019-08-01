@@ -1,5 +1,7 @@
 package com.practice;
 
+import com.lib.Commands;
+
 final class BlempJListPreviewAction {
     static void submitPreview() {
         if (CommandSemaphore.open) {
@@ -23,7 +25,7 @@ final class BlempJListPreviewAction {
 
                 SWcommand.writeDefaultEquationsToDDTO();
 
-                SWcommand.submitCommandOnBlob(SWaction.ACTION_SENT);
+                SWcommand.submitCommandOnBlob(Commands.SWDaemon.USER_ACTION_SENT);
             }
         }
     }

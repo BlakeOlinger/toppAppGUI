@@ -1,5 +1,7 @@
 package com.practice;
 
+import com.lib.Commands;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -41,7 +43,7 @@ final class BlempSelectionWindow extends JFrame{
 
     @Override
     public void dispose() {
-        SWcommand.submitCommand(SWaction.CLOSE_SW_PART);
+        SWcommand.submitCommand(Commands.SWDaemon.CLOSE_SW_PART);
 
         super.dispose();
     }

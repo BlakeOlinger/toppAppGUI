@@ -4,6 +4,8 @@ package com.practice;
 Initial menu window - functionally similar to a video game main menu
  */
 
+import com.lib.Commands;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -46,14 +48,14 @@ final class TopLevelMenu extends JFrame {
         window.add(
                 MenuButton.getInstance(
                         "Close SolidWorks Part",
-                        e -> SWcommand.submitCommand(SWaction.CLOSE_SW_PART)
+                        e -> SWcommand.submitCommand(Commands.SWDaemon.CLOSE_SW_PART)
                 )
         );
 
         window.add(
                 MenuButton.getInstance(
                         "Exit SolidWorks Daemon",
-                        e -> SWcommand.submitCommand(SWaction.EXIT_SW_DAEMON)
+                        e -> SWcommand.submitCommand(Commands.SWDaemon.EXIT)
                 )
         );
 
