@@ -16,8 +16,13 @@ final class IniSelectionAction implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (checkBox.isSelected() != IniFileDO.getFieldValue(
-                IniFileDO.keys[index]
-        ))
+                IniFileDO.keys[index])) {
             IniFileDO.setField(IniFileDO.keys[index], checkBox.isSelected());
+
+            if (!IniFileDO.keys[index].contains("_")) {
+                System.out.println("Doesn't contain a '_'");
+
+            }
+        }
     }
 }

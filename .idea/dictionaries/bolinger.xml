@@ -14,6 +14,7 @@
       <w>performant</w>
       <w>ppreview</w>
       <w>sldprt</w>
+      <w>spreview</w>
       <w>topp</w>
       <w>waction</w>
       <w>wcommand</w>
@@ -22,6 +23,7 @@
       <w>wexe</w>
       <w>wmicroservice</w>
       <w>wpart</w>
+      <w>wpreview</w>
     </words>
   </dictionary>
 </component>

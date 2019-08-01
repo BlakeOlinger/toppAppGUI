@@ -1,10 +1,11 @@
 package com.practice;
 
 import com.lib.Commands;
+import com.lib.PathsList;
 
 final class BlempJListPreviewAction {
     static void submitPreview() {
-        if (CommandSemaphore.open) {
+        if (SemaphoreList.isSWactionOpen) {
             if (PathsList.userSelectedBlemp.toString().contains(".base.")) {
                 System.out.println(" - user selected a .base.blemp file");
 
@@ -25,7 +26,7 @@ final class BlempJListPreviewAction {
 
                 SWcommand.writeDefaultEquationsToDDTO();
 
-                SWcommand.submitCommandOnBlob(Commands.SWDaemon.USER_ACTION_SENT);
+                SWcommand.submitCommandOnBlob(Commands.SWDaemon.USER_ACTION_SET);
             }
         }
     }

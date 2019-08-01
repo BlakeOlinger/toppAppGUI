@@ -31,54 +31,46 @@ final class Main {
     public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
 
-        var installRoot = InstallRoot.getInstallRoot("SolidWorks Daemon");
+        var installRoot = InstallRoot.getInstallRoot(FileNames.INSTALL_DIRECTORY);
 
-        var installDirectory = Paths.get(installRoot);
+        PathsList.installDirectory = Paths.get(installRoot);
 
         if (!ToppFiles.validateDirectory(
-                "Install",
-                installDirectory
+                FileNames.INSTALL_DIRECTORY,
+                PathsList.installDirectory
                 )) {
             return;
         }
 
-        var DBdaemonFileName = "toppAppDBdaemon.jar";
-
-        PathsList.DBdaemon = Paths.get(installRoot + DBdaemonFileName);
+        PathsList.DBdaemon = Paths.get(installRoot + FileNames.DB_DAEMON_JAR);
 
         if (!Files.exists(PathsList.DBdaemon))
-            if (!BlobDirectory.validateLocalBlobDatabaseInstance(installDirectory))
+            if (!BlobDirectory.validateLocalBlobDatabaseInstance(PathsList.installDirectory))
                 return;
 
-        var GUIiniFileName = "GUI.ini";
+        PathsList.userIni = Paths.get(installRoot + FileNames.GUI_INI);
 
-        PathsList.userIni = Paths.get(installRoot + GUIiniFileName);
-
-        if (ToppFiles.validateFile(GUIiniFileName, PathsList.userIni)) return;
+        if (ToppFiles.validateFile(FileNames.GUI_INI, PathsList.userIni)) return;
 
         IniFileDO.setUserIniConfig();
 
-        var GUIconfigFileName = "GUI.config";
+        PathsList.toppAppConfig = Paths.get(installRoot + FileNames.GUI_CONFIG);
 
-        PathsList.toppAppConfig = Paths.get(installRoot + GUIconfigFileName);
-
-        if (ToppFiles.validateFile(GUIconfigFileName, PathsList.toppAppConfig))
+        if (ToppFiles.validateFile(FileNames.GUI_CONFIG, PathsList.toppAppConfig))
             return;
 
-        if (ToppFiles.writeFile(GUIconfigFileName, PathsList.toppAppConfig, Commands.GUI_INIT))
+        if (ToppFiles.writeFile(FileNames.GUI_CONFIG, PathsList.toppAppConfig, Commands.GUI_INIT))
             return;
 
-        PathsList.SWexe = Paths.get(installRoot + "NuSWDaemon.exe");
+        PathsList.SWexe = Paths.get(installRoot + FileNames.SW_MS_EXE);
 
-        var swConfigFileName = "SWmicroservice.config";
-
-        PathsList.SWconfig = Paths.get(installRoot + swConfigFileName);
+        PathsList.SWconfig = Paths.get(installRoot + FileNames.SW_MS_CONFIG);
 
         if (!Files.exists(PathsList.SWexe)) {
-            if (ToppFiles.validateFile(swConfigFileName, PathsList.SWconfig))
+            if (ToppFiles.validateFile(FileNames.SW_MS_CONFIG, PathsList.SWconfig))
                 return;
 
-            if (ToppFiles.writeFile(swConfigFileName,
+            if (ToppFiles.writeFile(FileNames.SW_MS_CONFIG,
                     PathsList.SWconfig, Commands.SW_DAEMON_INIT))
                 return;
         }
@@ -86,17 +78,15 @@ final class Main {
         if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(IniFileDO.ON_START_START_SW))
             new ExecuteProcess(PathsList.SWexe.toString()).execute();
 
-        var DDTOfileName = "DDTO.blemp";
+        PathsList.DDTO = Paths.get(installRoot + FileNames.DDTO);
 
-        PathsList.DDTO = Paths.get(installRoot + DDTOfileName);
+        if (ToppFiles.validateFile(FileNames.DDTO, PathsList.DDTO)) return;
 
-        if (ToppFiles.validateFile(DDTOfileName, PathsList.DDTO)) return;
+        if (ToppFiles.writeFile(FileNames.DDTO, PathsList.DDTO, "")) return;
 
-        if (ToppFiles.writeFile(DDTOfileName, PathsList.DDTO, "")) return;
+        PathsList.baseBlobDirectory = Paths.get(installRoot + "\\blob\\");
 
-        var baseBlobDirectory = Paths.get(installDirectory + "\\blob\\");
-
-        PathsList.baseBlempPaths = BlempUtil.getAvailableBlempFiles(baseBlobDirectory);
+        PathsList.baseBlempPaths = BlempUtil.getAvailableBlempFiles(PathsList.baseBlobDirectory);
 
         if (PathsList.baseBlempPaths == null) {
             System.out.println(" - ERROR - No .blemp files found");
@@ -104,16 +94,14 @@ final class Main {
             return;
         }
 
-        var previewConfigFileName = "toppAppPreview.config";
+        PathsList.previewConfig = Paths.get(installRoot + FileNames.PREVIEW_MS_CONFIG);
 
-        PathsList.previewConfig = Paths.get(installRoot + previewConfigFileName);
+        if (!Files.exists(PathsList.previewConfig)) {
 
-        if  (!Files.exists(PathsList.previewConfig)) {
-
-            if (ToppFiles.validateFile(previewConfigFileName, PathsList.previewConfig))
+            if (ToppFiles.validateFile(FileNames.PREVIEW_MS_CONFIG, PathsList.previewConfig))
                 return;
 
-            if (ToppFiles.writeFile(previewConfigFileName, PathsList.previewConfig, Commands.PROGRAM_INIT))
+            if (ToppFiles.writeFile(FileNames.PREVIEW_MS_CONFIG, PathsList.previewConfig, Commands.PROGRAM_INIT))
                 return;
         }
 

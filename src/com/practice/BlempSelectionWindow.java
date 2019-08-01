@@ -1,6 +1,7 @@
 package com.practice;
 
 import com.lib.Commands;
+import com.lib.PathsList;
 
 import javax.swing.*;
 import java.awt.*;

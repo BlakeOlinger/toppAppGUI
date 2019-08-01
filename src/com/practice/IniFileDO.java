@@ -1,5 +1,6 @@
 package com.practice;
 
+import com.lib.PathsList;
 import com.lib.ToppFiles;
 
 import java.io.IOException;
@@ -7,16 +8,26 @@ import java.nio.file.Files;
 import java.util.HashMap;
 
 class IniFileDO {
+    /*
+    Use of a '_' character in the string of the field name denotes
+    the field is a setting for how this microservice interacts with
+    another program.
+    A lack of a '_' denotes an internal setting and will be handled
+    by an additional method as well as being set to the local ini file
+    via IniFileDO.setField()
+     */
     static final String ON_EXIT_CLOSE_SW = "onExit_CloseSWdaemon";
     static final String ON_START_START_SW = "onStart_StartSWdaemon";
     static final String ON_EXIT_CLOSE_SW_PART = "onExit_CloseSWpart";
+    static final String USE_SW_INSTANCE_PREVIEW = "solidWorksInstancePreview";
+    private static HashMap<String, Boolean> initFields = new HashMap<>();
+    static private String userIniConfig = "";
     static final String[] keys = new String[] {
             ON_EXIT_CLOSE_SW,
             ON_START_START_SW,
-            ON_EXIT_CLOSE_SW_PART
+            ON_EXIT_CLOSE_SW_PART,
+            USE_SW_INSTANCE_PREVIEW
     };
-    private static HashMap<String, Boolean> initFields = new HashMap<>();
-    static private String userIniConfig = "";
 
     static void setField(String field, Boolean value) {
         initFields.put(field, value);
@@ -46,6 +57,12 @@ class IniFileDO {
         return boolArray;
     }
 
+    // FIXME - if current user ini file character length differs from
+    //  - keys array length setUserIniConfig() will throw an
+    //  - StringIndexOutOfBoundsException
+    //  -- FIX - have check string length then if doesn't match the
+    //  -- keys array length write '0's for the difference then
+    //  -- then continue method
     static void setUserIniConfig() {
         try {
             if (Files.exists(PathsList.userIni) && !Files.readString(PathsList.userIni).isEmpty()) {

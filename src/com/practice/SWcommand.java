@@ -1,10 +1,11 @@
 package com.practice;
 
+import com.lib.PathsList;
 import com.lib.ToppFiles;
 
 final class SWcommand {
     static void submitCommandOnBlob(String action) {
-        if (CommandSemaphore.isOpen())
+        if (SemaphoreList.isIsSWactionOpen())
             ToppFiles.writeFile(
                 "SWmicroservice.config",
                     PathsList.SWconfig,
@@ -12,7 +13,7 @@ final class SWcommand {
     }
 
     static void submitCommand(String command) {
-        if (CommandSemaphore.isOpen())
+        if (SemaphoreList.isIsSWactionOpen())
             ToppFiles.writeFile(
                     "SWmicroservice.config",
                     PathsList.SWconfig,
@@ -20,7 +21,7 @@ final class SWcommand {
     }
 
     static void writeDefaultEquationsToDDTO() {
-        if (CommandSemaphore.isOpen())
+        if (SemaphoreList.isIsSWactionOpen())
             ToppFiles.writeFile(
                 "DDTO.blemp",
                     PathsList.DDTO,
@@ -29,7 +30,7 @@ final class SWcommand {
     }
 
     static void writeCurrentEquationsToDDTO() {
-        if (CommandSemaphore.isOpen())
+        if (SemaphoreList.isIsSWactionOpen())
             ToppFiles.writeFile(
                     "DDTO.blemp",
                     PathsList.DDTO,

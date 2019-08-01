@@ -12,7 +12,7 @@ final class UserSettingsWindow extends JFrame {
         var window = new UserSettingsWindow("User Settings");
         window.setLayout(new FlowLayout());
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        window.setSize(300, 130);
+        window.setSize(300, 165);
         window.setLocation(0, 200);
 
         var labels = new JLabel[IniFileDO.keys.length];
@@ -31,8 +31,13 @@ final class UserSettingsWindow extends JFrame {
 
         var label = new JLabel("Reset to Defaults:");
         var checkBox = new JCheckBox();
-        // TODO - when settings are reset put checks back how they're supposed to be
-        // FIXME - use a restore defaults button instead of a check box
+        // TODO - use button instead of checkbox
+        //  - check whether settings are different than defaults
+        //  -- if not then make button unselectable
+        //  -- perform check after the user presses as well
+        //  --- to prevent repeated resetting
+        //  - re-select all previously checked checkboxes if they
+        //  -- would have been by default
         checkBox.addActionListener(e -> IniFileDO.setIniToDefaults());
 
         window.add(label);
