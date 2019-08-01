@@ -1,5 +1,6 @@
 package com.practice;
 
+import com.lib.FileNames;
 import com.lib.PathsList;
 import com.lib.ToppFiles;
 
@@ -8,14 +9,6 @@ import java.nio.file.Files;
 import java.util.HashMap;
 
 class IniFileDO {
-    /*
-    Use of a '_' character in the string of the field name denotes
-    the field is a setting for how this microservice interacts with
-    another program.
-    A lack of a '_' denotes an internal setting and will be handled
-    by an additional method as well as being set to the local ini file
-    via IniFileDO.setField()
-     */
     static final String ON_EXIT_CLOSE_SW = "onExit_CloseSWdaemon";
     static final String ON_START_START_SW = "onStart_StartSWdaemon";
     static final String ON_EXIT_CLOSE_SW_PART = "onExit_CloseSWpart";
@@ -38,7 +31,7 @@ class IniFileDO {
             userIniConfig += initFields.get(keys[i]) ? "0" : "1";
 
         ToppFiles.writeFile(
-                "User Ini File",
+                FileNames.GUI_INI,
                 PathsList.userIni,
                 userIniConfig
         );
@@ -79,7 +72,7 @@ class IniFileDO {
                 initialize();
 
                 ToppFiles.writeFile(
-                        "User Ini File",
+                        FileNames.GUI_INI,
                         PathsList.userIni,
                         userIniConfig
                 );
@@ -104,7 +97,7 @@ class IniFileDO {
         initialize();
 
         ToppFiles.writeFile(
-                "User Ini File",
+                FileNames.GUI_INI,
                 PathsList.userIni,
                 userIniConfig
         );

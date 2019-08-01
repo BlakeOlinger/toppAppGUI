@@ -1,38 +1,39 @@
 package com.practice;
 
+import com.lib.FileNames;
 import com.lib.PathsList;
 import com.lib.ToppFiles;
 
 final class SWcommand {
-    static void submitCommandOnBlob(String action) {
-        if (SemaphoreList.isIsSWactionOpen())
+    static void submitCommandOnBlob(String command) {
+        if (SemaphoreList.is_SW_action_Open(PathsList.toppAppConfig))
             ToppFiles.writeFile(
-                "SWmicroservice.config",
+                    FileNames.SW_MS_CONFIG,
                     PathsList.SWconfig,
-                action + PathsList.blobString + "!");
+                command + PathsList.blobString + "!");
     }
 
     static void submitCommand(String command) {
-        if (SemaphoreList.isIsSWactionOpen())
+        if (SemaphoreList.is_SW_action_Open(PathsList.toppAppConfig))
             ToppFiles.writeFile(
-                    "SWmicroservice.config",
+                    FileNames.SW_MS_CONFIG,
                     PathsList.SWconfig,
                     command);
     }
 
     static void writeDefaultEquationsToDDTO() {
-        if (SemaphoreList.isIsSWactionOpen())
+        if (SemaphoreList.is_SW_action_Open(PathsList.toppAppConfig))
             ToppFiles.writeFile(
-                "DDTO.blemp",
+                FileNames.DDTO,
                     PathsList.DDTO,
                 BlempDO.defaultConfigurationBuffer
         );
     }
 
     static void writeCurrentEquationsToDDTO() {
-        if (SemaphoreList.isIsSWactionOpen())
+        if (SemaphoreList.is_SW_action_Open(PathsList.toppAppConfig))
             ToppFiles.writeFile(
-                    "DDTO.blemp",
+                    FileNames.DDTO,
                     PathsList.DDTO,
                     BlempDO.currentEquationBuffer
             );

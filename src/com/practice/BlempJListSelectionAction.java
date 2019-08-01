@@ -22,7 +22,8 @@ final class BlempJListSelectionAction implements ListSelectionListener {
     public void valueChanged(ListSelectionEvent e) {
         PathsList.userSelectedBlemp = Paths.get(nameList.getSelectedValue());
 
-        BlempJListPreviewAction.submitPreview();
+        if (SemaphoreList.is_SW_action_Open(PathsList.toppAppConfig) && SemaphoreList.is_SW_MS_preview_Open)
+            SWpreviewAction.submitPreview();
 
         label.setText("You selected: "
                 + nameList.getSelectedValue()
@@ -30,9 +31,7 @@ final class BlempJListSelectionAction implements ListSelectionListener {
 
         var selectButton = new JButton("Select");
 
-        var action = new BlempSelectionButtonAction(window);
-
-        selectButton.addActionListener(action);
+        selectButton.addActionListener(new BlempSelectionButtonAction());
 
         window.add(selectButton);
 

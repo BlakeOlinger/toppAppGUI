@@ -76,7 +76,7 @@ final class Main {
         }
 
         if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(IniFileDO.ON_START_START_SW))
-            new ExecuteProcess(PathsList.SWexe.toString()).execute();
+            new ExecuteProcess(Commands.SWDaemon.EXE_START).execute();
 
         PathsList.DDTO = Paths.get(installRoot + FileNames.DDTO);
 
