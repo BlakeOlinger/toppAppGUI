@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="toppAppUtilLib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../toppAppUtilLib/out/artifacts/toppAppUtilLib_jar/toppAppUtilLib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
