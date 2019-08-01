@@ -46,65 +46,78 @@ final class Main {
 
         var GUIiniFileName = "GUI.ini";
 
-        IniFileDO.path = Paths.get(installRoot + GUIiniFileName);
+        PathsList.userIni = Paths.get(installRoot + GUIiniFileName);
 
-        if (ToppFiles.validateFile(GUIiniFileName, IniFileDO.path)) return;
+        if (ToppFiles.validateFile(GUIiniFileName, PathsList.userIni)) return;
 
         IniFileDO.getCurrentUserIniSettings();
 
         var GUIconfigFileName = "GUI.config";
 
-        GUIconfigDO.GUIconfig = Paths.get(installRoot + GUIconfigFileName);
+        PathsList.toppAppConfig = Paths.get(installRoot + GUIconfigFileName);
 
-        if (ToppFiles.validateFile(GUIconfigFileName, GUIconfigDO.GUIconfig)) {
+        if (ToppFiles.validateFile(GUIconfigFileName, PathsList.toppAppConfig)) {
             return;
         }
 
-        if (ToppFiles.writeFile(GUIconfigFileName, GUIconfigDO.GUIconfig, "00")) {
+        if (ToppFiles.writeFile(GUIconfigFileName, PathsList.toppAppConfig, "00")) {
             return;
         }
 
-        var SWexePath = Paths.get(installRoot + "NuSWDaemon.exe");
+        PathsList.SWexe = Paths.get(installRoot + "NuSWDaemon.exe");
 
         var swConfigFileName = "SWmicroservice.config";
 
-        SWdaemonCommandDO.SWdaemonConfigPath = Paths.get(installRoot + swConfigFileName);
+        PathsList.SWconfig = Paths.get(installRoot + swConfigFileName);
 
-        if (!Files.exists(SWexePath)) {
-
-
-            if (ToppFiles.validateFile(swConfigFileName, SWdaemonCommandDO.SWdaemonConfigPath)) {
+        if (!Files.exists(PathsList.SWexe)) {
+            if (ToppFiles.validateFile(swConfigFileName, PathsList.SWconfig)) {
                 return;
             }
 
             if (ToppFiles.writeFile(swConfigFileName,
-                    SWdaemonCommandDO.SWdaemonConfigPath, "011!")) {
+                    PathsList.SWconfig, "011!")) {
                 return;
             }
         }
 
-        if (Files.exists(SWexePath) && IniFileDO.getFieldValue(
+        if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(
                 IniFileDO.ON_START_START_SW
         ))
-            ForkJoinPool.commonPool().execute(new SWDaemonProcess(SWexePath));
+            ForkJoinPool.commonPool().execute(new SWDaemonProcess(PathsList.SWexe));
 
         var DDTOfileName = "DDTO.blemp";
 
-        DDTOdataObject.DDTOpath = Paths.get(installRoot + DDTOfileName);
+        PathsList.DDTO = Paths.get(installRoot + DDTOfileName);
 
-        if (ToppFiles.validateFile(DDTOfileName, DDTOdataObject.DDTOpath)) return;
+        if (ToppFiles.validateFile(DDTOfileName, PathsList.DDTO)) return;
 
-        if (ToppFiles.writeFile(DDTOfileName, DDTOdataObject.DDTOpath, "")) return;
+        if (ToppFiles.writeFile(DDTOfileName, PathsList.DDTO, "")) return;
 
         var baseBlobDirectory = Paths.get(installDirectory + "\\blob\\");
 
-        BlempSelectionDO.baseBlempPaths = BlobDirectory.getAvailableBlempFiles(baseBlobDirectory);
+        PathsList.baseBlempPaths = BlempUtil.getAvailableBlempFiles(baseBlobDirectory);
 
-        if (BlempSelectionDO.baseBlempPaths == null) {
+        if (PathsList.baseBlempPaths == null) {
             System.out.println(" - ERROR - No .blemp files found");
 
             return;
         }
+
+        if  (!Files.exists(Paths.get(installRoot + "toppAPPpreview.jar"))) {
+            var configFileName = "toppAppPreview.config";
+
+            var configFilePath = Paths.get(installRoot + configFileName);
+
+            if (ToppFiles.validateFile(configFileName, configFilePath)) {
+                return;
+            }
+
+            if (ToppFiles.writeFile(configFileName, configFilePath, "0")) {
+                return;
+            }
+        }
+
 
         TopLevelMenu.createWindow();
 

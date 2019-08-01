@@ -8,7 +8,7 @@ class CommandSemaphore {
 
     static boolean isOpen() {
         try {
-            return Files.readString(GUIconfigDO.GUIconfig).substring(1, 2).compareTo("0") == 0;
+            return Files.readString(PathsList.toppAppConfig).substring(1, 2).compareTo("0") == 0;
         } catch (IOException e) {
             e.printStackTrace();
             return false;

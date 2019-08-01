@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 
 final class Internet {
-    static boolean connected() {
+    static boolean isConnected() {
         try {
             var url = new URL("https://www.google.com");
 

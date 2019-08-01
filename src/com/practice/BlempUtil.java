@@ -2,6 +2,8 @@ package com.practice;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 final class BlempUtil {
     static void populateDefaultConfiguration() {
@@ -26,7 +28,7 @@ final class BlempUtil {
 
     private static String readBlempFile() {
         try {
-            return Files.readString(BlempSelectionDO.userSelectedBlemp);
+            return Files.readString(PathsList.userSelectedBlemp);
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -38,7 +40,7 @@ final class BlempUtil {
         BlempDO.equationList.clear();
 
         try {
-            var tmpArray = Files.readString(BlempSelectionDO.userSelectedBlemp).split("!");
+            var tmpArray = Files.readString(PathsList.userSelectedBlemp).split("!");
 
             for (var i = 0; i < tmpArray.length; ++i)
                 BlempDO.equationList.add(tmpArray[i]);
@@ -92,6 +94,26 @@ final class BlempUtil {
             BlempDO.currentEquationBuffer = currentStringEquationBuffer
                     .replace("$", "")
                     .replace("#", "");
+        }
+    }
+
+    static ArrayList<Path> getAvailableBlempFiles(Path blobDirectory) {
+        var paths = new ArrayList<Path>();
+
+        try (var fileListStream = Files.list(blobDirectory)) {
+            var tempPaths = new ArrayList<Path>();
+
+            fileListStream.forEach(tempPaths::add);
+
+            for(Path path: tempPaths)
+                if (path.toString().contains(".blemp"))
+                    paths.add(path);
+
+            return paths.size() == 0 ? null : paths;
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return null;
         }
     }
 }

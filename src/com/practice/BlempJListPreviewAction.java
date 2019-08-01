@@ -3,20 +3,20 @@ package com.practice;
 final class BlempJListPreviewAction {
     static void submitPreview() {
         if (CommandSemaphore.open) {
-            if (BlempSelectionDO.userSelectedBlemp.toString().contains(".base.")) {
+            if (PathsList.userSelectedBlemp.toString().contains(".base.")) {
                 System.out.println(" - user selected a .base.blemp file");
 
-                BlobDO.blobPathString = BlempSelectionDO.userSelectedBlemp.toString()
+                PathsList.blobString = PathsList.userSelectedBlemp.toString()
                         .replace(".base.blemp", ".blob.SLDPRT");
 
                 var tmpArray = new String[] {};
 
-                tmpArray = BlobDO.blobPathString.split("\\\\");
+                tmpArray = PathsList.blobString.split("\\\\");
 
-                BlobDO.blobPathString = tmpArray[tmpArray.length - 1];
+                PathsList.blobString = tmpArray[tmpArray.length - 1];
 
                 System.out.println(" - blob file to load in preview - "
-                        + BlobDO.blobPathString);
+                        + PathsList.blobString);
 
 
                 BlempUtil.populateDefaultConfiguration();

@@ -12,10 +12,12 @@
       <w>ofile</w>
       <w>opath</w>
       <w>performant</w>
+      <w>ppreview</w>
       <w>sldprt</w>
       <w>topp</w>
       <w>waction</w>
       <w>wcommand</w>
+      <w>wconfig</w>
       <w>wdaemon</w>
       <w>wexe</w>
       <w>wmicroservice</w>

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 final class BlobDirectory {
     static boolean validateLocalBlobDatabaseInstance(Path installDirectory) {
@@ -16,7 +15,7 @@ final class BlobDirectory {
             System.out.println(" - Local Blob Database Instance - Found");
 
             if (!Files.exists(Paths.get(installDirectory.toString() + "\\toppAppDBdaemon.jar"))) {
-                if (Internet.connected()) {
+                if (Internet.isConnected()) {
                     System.out.println(" - Syncing local database instance with remote");
 
                     try {
@@ -39,7 +38,7 @@ final class BlobDirectory {
             return true;
         } else {
 
-            if (Internet.connected()) {
+            if (Internet.isConnected()) {
                 try {
                     System.out.println(" - Local Blob Database Instance - Not Found");
 
@@ -67,26 +66,6 @@ final class BlobDirectory {
                 }
             }
             return false;
-        }
-    }
-
-    static ArrayList<Path> getAvailableBlempFiles(Path blobDirectory) {
-        var paths = new ArrayList<Path>();
-
-        try (var fileListStream = Files.list(blobDirectory)) {
-            var tempPaths = new ArrayList<Path>();
-
-            fileListStream.forEach(tempPaths::add);
-
-            for(Path path: tempPaths)
-                if (path.toString().contains(".blemp"))
-                    paths.add(path);
-
-            return paths.size() == 0 ? null : paths;
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            return null;
         }
     }
 }

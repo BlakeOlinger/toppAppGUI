@@ -5,15 +5,15 @@ final class SWcommand {
         if (CommandSemaphore.isOpen())
             ToppFiles.writeFile(
                 "SWmicroservice.config",
-                SWdaemonCommandDO.SWdaemonConfigPath,
-                action + BlobDO.blobPathString + "!");
+                    PathsList.SWconfig,
+                action + PathsList.blobString + "!");
     }
 
     static void submitCommand(String command) {
         if (CommandSemaphore.isOpen())
             ToppFiles.writeFile(
                     "SWmicroservice.config",
-                    SWdaemonCommandDO.SWdaemonConfigPath,
+                    PathsList.SWconfig,
                     command);
     }
 
@@ -21,7 +21,7 @@ final class SWcommand {
         if (CommandSemaphore.isOpen())
             ToppFiles.writeFile(
                 "DDTO.blemp",
-                DDTOdataObject.DDTOpath,
+                    PathsList.DDTO,
                 BlempDO.defaultConfigurationBuffer
         );
     }
@@ -30,7 +30,7 @@ final class SWcommand {
         if (CommandSemaphore.isOpen())
             ToppFiles.writeFile(
                     "DDTO.blemp",
-                    DDTOdataObject.DDTOpath,
+                    PathsList.DDTO,
                     BlempDO.currentEquationBuffer
             );
     }

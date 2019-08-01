@@ -2,11 +2,9 @@ package com.practice;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 
 class IniFileDO {
-    static Path path;
     static final String ON_EXIT_CLOSE_SW = "onExit_CloseSWdaemon";
     static final String ON_START_START_SW = "onStart_StartSWdaemon";
     static final String ON_EXIT_CLOSE_SW_PART = "onExit_CloseSWpart";
@@ -34,7 +32,7 @@ class IniFileDO {
 
         ToppFiles.writeFile(
                 "User Ini File",
-                path,
+                PathsList.userIni,
                 userIniConfig
         );
     }
@@ -58,8 +56,8 @@ class IniFileDO {
 
     private static void setUserIniConfig() {
         try {
-            if (Files.exists(path) && !Files.readString(path).isEmpty()) {
-                var rawIniFile = Files.readString(path);
+            if (Files.exists(PathsList.userIni) && !Files.readString(PathsList.userIni).isEmpty()) {
+                var rawIniFile = Files.readString(PathsList.userIni);
 
                 var boolArray = checkBool(rawIniFile, keys.length - 1);
 
@@ -81,7 +79,7 @@ class IniFileDO {
 
                 ToppFiles.writeFile(
                         "User Ini File",
-                        path,
+                        PathsList.userIni,
                         userIniConfig
                 );
             }
@@ -107,12 +105,12 @@ class IniFileDO {
 
         ToppFiles.writeFile(
                 "User Ini File",
-                path,
+                PathsList.userIni,
                 userIniConfig
         );
 
         try {
-            System.out.println(Files.readString(path));
+            System.out.println(Files.readString(PathsList.userIni));
         } catch (IOException e) {
             e.printStackTrace();
         }
