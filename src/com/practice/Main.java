@@ -2,9 +2,6 @@ package com.practice;
 
 import com.lib.*;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 /*
 Steps to writing a command to SW daemon -
  - CommandSemaphore.close()
@@ -28,26 +25,15 @@ Steps to writing a command to SW daemon -
  */
 
 final class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidInstallException {
         System.out.println("TOPP App GUI - Start");
 
-        var installRoot = InstallRoot.getInstallRoot(FileNames.INSTALL_DIRECTORY);
-
-        PathsList.installDirectory = Paths.get(installRoot);
-
-        if (!ToppFiles.validateDirectory(
+        ToppFiles.validateDirectory(
                 FileNames.INSTALL_DIRECTORY,
-                PathsList.installDirectory
-                )) {
-            return;
-        }
+                PathsList.INSTALL_DIRECTORY);
 
-        PathsList.DBdaemon = Paths.get(installRoot + FileNames.DB_DAEMON_JAR);
-
-        if (!Files.exists(PathsList.DBdaemon))
-            if (!BlobDirectory.validateLocalBlobDatabaseInstance(PathsList.installDirectory))
-                return;
-
+        BlobDirectory.validateLocalBlobDatabaseInstance();
+/*
         PathsList.userIni = Paths.get(installRoot + FileNames.GUI_INI);
 
         if (ToppFiles.validateFile(FileNames.GUI_INI, PathsList.userIni)) return;
@@ -123,5 +109,6 @@ final class Main {
             SWcommand.submitCommand(Commands.SWDaemon.CLOSE_SW_PART);
 
         System.exit(0);
+ */
     }
 }

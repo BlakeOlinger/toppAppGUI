@@ -22,8 +22,9 @@ final class BlempJListSelectionAction implements ListSelectionListener {
     public void valueChanged(ListSelectionEvent e) {
         PathsList.userSelectedBlemp = Paths.get(nameList.getSelectedValue());
 
-        if (SemaphoreList.is_SW_action_Open(PathsList.toppAppConfig) && SemaphoreList.is_SW_MS_preview_Open)
-            SWpreviewAction.submitPreview();
+        // FIXME - semaphores not reading .ini or .config during runtime
+//        if (SemaphoreList.is_SW_action_Open(PathsList.toppAppConfig) && SemaphoreList.is_SW_MS_preview_Open)
+//            SWpreviewAction.submitPreview();
 
         label.setText("You selected: "
                 + nameList.getSelectedValue()
