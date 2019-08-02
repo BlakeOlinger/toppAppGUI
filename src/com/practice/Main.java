@@ -31,9 +31,9 @@ final class Main {
         ToppFiles.validateDirectory(
                 FileNames.INSTALL_DIRECTORY,
                 PathsList.INSTALL_DIRECTORY);
-
-        BlobDirectory.validateLocalBlobDatabaseInstance();
 /*
+        BlobDirectory.validateLocalBlobDatabaseInstance();
+
         PathsList.userIni = Paths.get(installRoot + FileNames.GUI_INI);
 
         if (ToppFiles.validateFile(FileNames.GUI_INI, PathsList.userIni)) return;

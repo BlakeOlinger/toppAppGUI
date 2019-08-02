@@ -33,5 +33,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="toppAppUtilLib" level="project" />
+    <orderEntry type="library" name="boLib" level="project" />
   </component>
 </module>

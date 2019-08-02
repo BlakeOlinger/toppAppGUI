@@ -1,4 +1,4 @@
 module toppApp {
     requires java.desktop;
-    requires toppAppUtilLib;
+    requires transitive toppAppUtilLib;
 }
