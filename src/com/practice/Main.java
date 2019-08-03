@@ -28,6 +28,9 @@ final class Main {
     public static void main(String[] args) throws InvalidInstallException {
         System.out.println("TOPP App GUI - Start");
 
+        // TODO - initialize install - put into toppAppUtilLIb
+        //  -  group the Util.createDirectories/file/write etc
+        //  -  into a single initialize class in the app lib
         ToppFiles.validateDirectory(
                 FileNames.INSTALL_DIRECTORY,
                 PathsList.INSTALL_DIRECTORY);
