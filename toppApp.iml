@@ -32,7 +32,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="toppAppUtilLib" level="project" />
     <orderEntry type="library" name="boLib" level="project" />
+    <orderEntry type="library" name="toppAppUtilLib" level="project" />
   </component>
 </module>

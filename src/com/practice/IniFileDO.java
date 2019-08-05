@@ -1,8 +1,6 @@
 package com.practice;
 
-import com.lib.FileNames;
 import com.lib.PathsList;
-import com.lib.ToppFiles;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,11 +28,11 @@ class IniFileDO {
         for (var i = 0; i < keys.length; ++i)
             userIniConfig += initFields.get(keys[i]) ? "0" : "1";
 
-        ToppFiles.writeFile(
-                FileNames.GUI_INI,
-                PathsList.userIni,
-                userIniConfig
-        );
+//        ToppFiles.writeFile(
+//                FileNames.GUI_INI,
+//                PathsList.userIni,
+//                userIniConfig
+//        );
     }
 
     static boolean getFieldValue(String field) {
@@ -71,11 +69,11 @@ class IniFileDO {
             } else {
                 initialize();
 
-                ToppFiles.writeFile(
-                        FileNames.GUI_INI,
-                        PathsList.userIni,
-                        userIniConfig
-                );
+//                ToppFiles.writeFile(
+//                        FileNames.GUI_INI,
+//                        PathsList.userIni,
+//                        userIniConfig
+//                );
             }
             System.out.println(" - GUI.ini - Settings Applied");
         } catch (IOException e) {
@@ -96,11 +94,11 @@ class IniFileDO {
     static void setIniToDefaults() {
         initialize();
 
-        ToppFiles.writeFile(
-                FileNames.GUI_INI,
-                PathsList.userIni,
-                userIniConfig
-        );
+//        ToppFiles.writeFile(
+//                FileNames.GUI_INI,
+//                PathsList.userIni,
+//                userIniConfig
+//        );
     }
 
 }

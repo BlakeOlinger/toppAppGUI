@@ -1,8 +1,10 @@
 package com.practice;
 
-import com.lib.*;
-
-/*
+import bo.core.system.IniFile;
+import bo.core.system.Initialize;
+import com.lib.Commands;
+import com.lib.FileNames;
+import com.lib.PathsList;/*
 Steps to writing a command to SW daemon -
  - CommandSemaphore.close()
  - BlempUtil.populateDefaultConfiguration (for preview) or .populateCurrentConfiguration
@@ -25,15 +27,16 @@ Steps to writing a command to SW daemon -
  */
 
 final class Main {
-    public static void main(String[] args) throws InvalidInstallException {
+    public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
 
-        // TODO - initialize install - put into toppAppUtilLIb
-        //  -  group the Util.createDirectories/file/write etc
-        //  -  into a single initialize class in the app lib
-        ToppFiles.validateDirectory(
+        if (!Initialize.createAndInitialize(
+                PathsList.PATH_MAP,
+                Commands.INIT_COMMAND_MAP,
                 FileNames.INSTALL_DIRECTORY,
-                PathsList.INSTALL_DIRECTORY);
+                new IniFile(FileNames.GUI_INI, Commands.GUI_INI),
+                FileNames.GUI_CONFIG, FileNames.SW_MS_CONFIG, FileNames.DDTO
+        )) System.exit(-1);
 /*
         BlobDirectory.validateLocalBlobDatabaseInstance();
 

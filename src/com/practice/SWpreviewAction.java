@@ -1,6 +1,5 @@
 package com.practice;
 
-import com.lib.Commands;
 import com.lib.PathsList;
 
 final class SWpreviewAction {
@@ -23,9 +22,9 @@ final class SWpreviewAction {
 
             BlempUtil.populateDefaultConfiguration();
 
-            SWcommand.writeDefaultEquationsToDDTO();
+//            SWcommand.writeDefaultEquationsToDDTO();
 
-            SWcommand.submitCommandOnBlob(Commands.SWDaemon.USER_ACTION_SET);
+//            SWcommand.submitCommandOnBlob(Commands.SWDaemon.USER_ACTION_SET);
             }
     }
 }

@@ -1,7 +1,5 @@
 package com.practice;
 
-import com.lib.Commands;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,9 +31,9 @@ final class UserInputAction implements ActionListener {
 
         System.out.println(BlempDO.currentEquationBuffer);
 
-        SWcommand.writeCurrentEquationsToDDTO();
+//        SWcommand.writeCurrentEquationsToDDTO();
 
-        SWcommand.submitCommandOnBlob(Commands.SWDaemon.USER_ACTION_SET);
+//        SWcommand.submitCommandOnBlob(Commands.SWDaemon.USER_ACTION_SET);
 
     }
 }
