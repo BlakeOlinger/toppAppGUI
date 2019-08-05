@@ -1,10 +1,9 @@
 package com.practice;
 
-import bo.core.system.IniFile;
-import bo.core.system.Initialize;
-import com.lib.Commands;
-import com.lib.FileNames;
-import com.lib.PathsList;/*
+import com.lib.Initialize;
+import com.lib.Microservice;
+
+/*
 Steps to writing a command to SW daemon -
  - CommandSemaphore.close()
  - BlempUtil.populateDefaultConfiguration (for preview) or .populateCurrentConfiguration
@@ -30,13 +29,7 @@ final class Main {
     public static void main(String[] args) {
         System.out.println("TOPP App GUI - Start");
 
-        if (!Initialize.createAndInitialize(
-                PathsList.PATH_MAP,
-                Commands.INIT_COMMAND_MAP,
-                FileNames.INSTALL_DIRECTORY,
-                new IniFile(FileNames.GUI_INI, Commands.GUI_INI),
-                FileNames.GUI_CONFIG, FileNames.SW_MS_CONFIG, FileNames.DDTO
-        )) System.exit(-1);
+        if (!Initialize.microservice(Microservice.TOPP_APP)) System.exit(-1);
 /*
         BlobDirectory.validateLocalBlobDatabaseInstance();
 
