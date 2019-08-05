@@ -25,12 +25,23 @@ final class Main {
 
         if (!Initialize.microservice(Microservice.TOPP_APP)) System.exit(-1);
 
-        // TODO - will need to do a start some app list if their exe/jar exists
-        //  - this could be considered a base microservice requirement
-        //  -  GUI's and Masters for example
+        // TODO - refactor the IniFileDO class and functions down to base lib
 //        if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(IniFileDO.ON_START_START_SW))
 //            new ExecuteProcess(Commands.SWDaemon.EXE_START).execute();
 
+        // TODO - don't activate until GUI with ini settings are available
+        // TODO - need to define a way to look at the SW config file or
+        //  -  some other means to determine if the exe is still running
+        //  -  don't call another instance if it is
+//        if (Files.exists(PathsList.SW_MS_EXE))
+//            Commands.SWDaemon.start();
+//        try {
+//            Thread.sleep(15_000);
+//
+//            Commands.SWDaemon.stop();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         // TODO - will need to get list of available base.blemp and .blemp files in the local
         //  -  blob database
