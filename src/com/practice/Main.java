@@ -4,12 +4,6 @@ import com.lib.Initialize;
 import com.lib.Microservice;
 
 /*
-Steps to writing a command to SW daemon -
- - CommandSemaphore.close()
- - BlempUtil.populateDefaultConfiguration (for preview) or .populateCurrentConfiguration
- - SWcommand.writeEquationsToDDTO()
- - SWcommand.submitCommand()
-
  -- Format --
  the .blemp equation must take the form:
     "O.D.@Sketch1"=$40#$in$!
@@ -30,84 +24,52 @@ final class Main {
         System.out.println("TOPP App GUI - Start");
 
         if (!Initialize.microservice(Microservice.TOPP_APP)) System.exit(-1);
-/*
-        BlobDirectory.validateLocalBlobDatabaseInstance();
 
-        PathsList.userIni = Paths.get(installRoot + FileNames.GUI_INI);
-
-        if (ToppFiles.validateFile(FileNames.GUI_INI, PathsList.userIni)) return;
-
-        IniFileDO.setUserIniConfig();
-
-        PathsList.toppAppConfig = Paths.get(installRoot + FileNames.GUI_CONFIG);
-
-        if (ToppFiles.validateFile(FileNames.GUI_CONFIG, PathsList.toppAppConfig))
-            return;
-
-        if (ToppFiles.writeFile(FileNames.GUI_CONFIG, PathsList.toppAppConfig, Commands.GUI_INIT))
-            return;
-
-        PathsList.SWexe = Paths.get(installRoot + FileNames.SW_MS_EXE);
-
-        PathsList.SWconfig = Paths.get(installRoot + FileNames.SW_MS_CONFIG);
-
-        if (!Files.exists(PathsList.SWexe)) {
-            if (ToppFiles.validateFile(FileNames.SW_MS_CONFIG, PathsList.SWconfig))
-                return;
-
-            if (ToppFiles.writeFile(FileNames.SW_MS_CONFIG,
-                    PathsList.SWconfig, Commands.SW_DAEMON_INIT))
-                return;
-        }
-
-        if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(IniFileDO.ON_START_START_SW))
-            new ExecuteProcess(Commands.SWDaemon.EXE_START).execute();
-
-        PathsList.DDTO = Paths.get(installRoot + FileNames.DDTO);
-
-        if (ToppFiles.validateFile(FileNames.DDTO, PathsList.DDTO)) return;
-
-        if (ToppFiles.writeFile(FileNames.DDTO, PathsList.DDTO, "")) return;
-
-        PathsList.baseBlobDirectory = Paths.get(installRoot + "\\blob\\");
-
-        PathsList.baseBlempPaths = BlempUtil.getAvailableBlempFiles(PathsList.baseBlobDirectory);
-
-        if (PathsList.baseBlempPaths == null) {
-            System.out.println(" - ERROR - No .blemp files found");
-
-            return;
-        }
-
-        PathsList.previewConfig = Paths.get(installRoot + FileNames.PREVIEW_MS_CONFIG);
-
-        if (!Files.exists(PathsList.previewConfig)) {
-
-            if (ToppFiles.validateFile(FileNames.PREVIEW_MS_CONFIG, PathsList.previewConfig))
-                return;
-
-            if (ToppFiles.writeFile(FileNames.PREVIEW_MS_CONFIG, PathsList.previewConfig, Commands.PROGRAM_INIT))
-                return;
-        }
+        // TODO - will need to do a start some app list if their exe/jar exists
+        //  - this could be considered a base microservice requirement
+        //  -  GUI's and Masters for example
+//        if (Files.exists(PathsList.SWexe) && IniFileDO.getFieldValue(IniFileDO.ON_START_START_SW))
+//            new ExecuteProcess(Commands.SWDaemon.EXE_START).execute();
 
 
-        TopLevelMenu.createWindow();
+        // TODO - will need to get list of available base.blemp and .blemp files in the local
+        //  -  blob database
+        //  -  Reading the contents of a directory is something any MS may need
+        //  -   put into base lib
+//        PathsList.baseBlobDirectory = Paths.get(installRoot + "\\blob\\");
+//
+//        PathsList.baseBlempPaths = BlempUtil.getAvailableBlempFiles(PathsList.baseBlobDirectory);
+//
+//        if (PathsList.baseBlempPaths == null) {
+//            System.out.println(" - ERROR - No .blemp files found");
+//
+//            return;
+//        }
 
-        TopLevelMenu.waitFor();
 
-        if (IniFileDO.getFieldValue(
-                IniFileDO.ON_EXIT_CLOSE_SW
-        ))
-            SWcommand.submitCommand(Commands.SWDaemon.EXIT);
 
-        if (IniFileDO.getFieldValue(
-                IniFileDO.ON_EXIT_CLOSE_SW_PART
-        ) && !IniFileDO.getFieldValue(
-                IniFileDO.ON_EXIT_CLOSE_SW
-        ))
-            SWcommand.submitCommand(Commands.SWDaemon.CLOSE_SW_PART);
+        // TODO - this will go in the custom desktop lib
+//        TopLevelMenu.createWindow();
+//
+//        TopLevelMenu.waitFor();
 
-        System.exit(0);
- */
+        // TODO - these issue commands based on ini settings
+        //  - something every app will need to consider
+        //  - put in low level library but have it abstract
+        //  - the events and handlers similar to Swing event handlers
+//        if (IniFileDO.getFieldValue(
+//                IniFileDO.ON_EXIT_CLOSE_SW
+//        ))
+//            SWcommand.submitCommand(Commands.SWDaemon.EXIT);
+//
+//        if (IniFileDO.getFieldValue(
+//                IniFileDO.ON_EXIT_CLOSE_SW_PART
+//        ) && !IniFileDO.getFieldValue(
+//                IniFileDO.ON_EXIT_CLOSE_SW
+//        ))
+//            SWcommand.submitCommand(Commands.SWDaemon.CLOSE_SW_PART);
+//
+//        System.exit(0);
+
     }
 }

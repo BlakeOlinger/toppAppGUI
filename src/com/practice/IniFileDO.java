@@ -1,9 +1,5 @@
 package com.practice;
 
-import com.lib.PathsList;
-
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashMap;
 
 class IniFileDO {
@@ -54,32 +50,32 @@ class IniFileDO {
     //  -- FIX - have check string length then if doesn't match the
     //  -- keys array length write '0's for the difference then
     //  -- then continue method
-    static void setUserIniConfig() {
-        try {
-            if (Files.exists(PathsList.userIni) && !Files.readString(PathsList.userIni).isEmpty()) {
-                var rawIniFile = Files.readString(PathsList.userIni);
-
-                var boolArray = checkBool(rawIniFile, keys.length - 1);
-
-                for (var i = 0; i < keys.length; ++i)
-                    initFields.put(keys[i], boolArray[i]);
-
-                for (var i = 0; i < keys.length; ++i)
-                    userIniConfig += initFields.get(keys[i]) ? "0" : "1";
-            } else {
-                initialize();
+//    static void setUserIniConfig() {
+//        try {
+//            if (Files.exists(PathsList.userIni) && !Files.readString(PathsList.userIni).isEmpty()) {
+//                var rawIniFile = Files.readString(PathsList.userIni);
+//
+//                var boolArray = checkBool(rawIniFile, keys.length - 1);
+//
+//                for (var i = 0; i < keys.length; ++i)
+//                    initFields.put(keys[i], boolArray[i]);
+//
+//                for (var i = 0; i < keys.length; ++i)
+//                    userIniConfig += initFields.get(keys[i]) ? "0" : "1";
+//            } else {
+//                initialize();
 
 //                ToppFiles.writeFile(
 //                        FileNames.GUI_INI,
 //                        PathsList.userIni,
 //                        userIniConfig
 //                );
-            }
-            System.out.println(" - GUI.ini - Settings Applied");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//            }
+//            System.out.println(" - GUI.ini - Settings Applied");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private static void initialize() {
         userIniConfig = "";
